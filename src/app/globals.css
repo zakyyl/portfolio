@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: #ffffff;
+  --color-secondary: #dc2626;
+  --color-accent: #facc15;
+  --color-text: #0f172a;
+}
+/* Dark mode */
+[data-theme="dark"] {
+  --color-primary: #0b0f1a;
+  --color-secondary: #f87171;
+  --color-accent: #fde047;
+  --color-text: #e5e7eb;
+}
+* {
+  box-sizing: border-box;
+}
