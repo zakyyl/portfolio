@@ -3,6 +3,9 @@ import "./globals.css";
 export const metadata = {
   title: "Zave | Web Developer",
   description: "Web Developer specializing in Laravel & React",
+  icons: {
+    icon: "/images/zave-square.png",
+  },
 };
 
 export default function RootLayout({

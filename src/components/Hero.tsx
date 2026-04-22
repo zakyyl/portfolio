@@ -87,6 +87,10 @@ export default function Hero() {
           <div className="text-xs text-[var(--color-text)]/50">/03</div>
           <div className="text-sm font-semibold text-[var(--color-text)]/80">Flutter</div>
         </div>
+        <div>
+          <div className="text-xs text-[var(--color-text)]/50">/04</div>
+          <div className="text-sm font-semibold text-[var(--color-text)]/80">Next</div>
+        </div>
       </div>
 
       <div className="absolute inset-0 pointer-events-none select-none opacity-5">

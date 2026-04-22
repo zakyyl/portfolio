@@ -22,7 +22,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="max-w-4xl mx-auto px-4 py-24 bg-[var(--color-primary)]"
+      className="max-w-4xl mx-auto px-4 py-16 md:py-24 bg-[var(--color-primary)]"
     >
       <div className="mb-8">
         <div className="inline-block w-12 h-1 bg-[var(--color-accent)] mb-4"></div>
@@ -50,7 +50,7 @@ export default function Contact() {
               <div className="font-semibold text-[var(--color-text)] mb-1">
                 {contact.name}
               </div>
-              <div className="text-sm text-[var(--color-text)]/60">
+              <div className="text-xs sm:text-sm text-[var(--color-text)]/60 break-all">
                 {contact.label}
               </div>
             </div>

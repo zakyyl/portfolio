@@ -13,7 +13,7 @@ const skills = [
 
 export default function Skills() {
   return (
-    <section className="max-w-6xl mx-auto px-4 py-24 bg-[var(--color-primary)]">
+    <section className="max-w-6xl mx-auto px-4 py-16 md:py-24 bg-[var(--color-primary)]">
       <div className="text-center mb-12">
         <div className="inline-block w-12 h-1 bg-[var(--color-accent)] mb-4"></div>
         <h2 className="text-4xl md:text-5xl font-bold mb-3">

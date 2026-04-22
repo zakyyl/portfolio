@@ -4,13 +4,13 @@ export default function About() {
   return (
     <section
       id="about"
-      className="max-w-6xl mx-auto px-4 py-24 bg-[var(--color-primary)]"
+      className="max-w-6xl mx-auto px-4 py-16 md:py-24 bg-[var(--color-primary)]"
     >
-      <div className="grid md:grid-cols-2 gap-12 items-center">
+      <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
         <div className="relative">
           <div className="absolute -top-4 -left-4 w-24 h-24 border-2 border-[var(--color-accent)] opacity-30"></div>
           <div className="absolute -bottom-4 -right-4 w-24 h-24 border-2 border-[var(--color-secondary)] opacity-30"></div>          
-          <div className="relative z-10 aspect-square max-w-md mx-auto">
+          <div className="relative z-10 aspect-square max-w-[260px] sm:max-w-sm md:max-w-md mx-auto">
             <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-secondary)]/20 to-[var(--color-accent)]/20 rounded-2xl transform rotate-3"></div>
             
             <div className="relative w-full h-full rounded-2xl overflow-hidden border-4 border-[var(--color-primary)] shadow-2xl">
@@ -38,7 +38,7 @@ export default function About() {
         <div className="space-y-6">
           <div>
             <div className="inline-block w-12 h-1 bg-[var(--color-accent)] mb-4"></div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-2">
+            <h2 className="text-3xl md:text-5xl font-bold mb-2">
               About <span className="text-[var(--color-secondary)]">Me</span>
             </h2>
           </div>
@@ -54,7 +54,8 @@ export default function About() {
               . I focus on backend development using{" "}
               <strong className="text-[var(--color-text)] font-semibold">Laravel</strong>{" "}
               and frontend development using{" "}
-              <strong className="text-[var(--color-text)] font-semibold">React</strong>.
+              <strong className="text-[var(--color-text)] font-semibold">React</strong> &{" "}
+              <strong className="text-[var(--color-text)] font-semibold">Next.js</strong>
             </p>
 
             <p className="text-base md:text-lg">
@@ -69,20 +70,17 @@ export default function About() {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-3 pt-4">
+          {/* <div className="flex flex-wrap gap-3 pt-4">
             <span className="px-4 py-2 bg-[var(--color-secondary)]/10 text-[var(--color-secondary)] rounded-full text-sm font-medium">
               Laravel
             </span>
             <span className="px-4 py-2 bg-[var(--color-accent)]/10 text-[var(--color-secondary)] rounded-full text-sm font-medium">
               React
             </span>
-            {/* <span className="px-4 py-2 bg-[var(--color-accent)]/20 text-[var(--color-text)] rounded-full text-sm font-medium">
-              Flutter
-            </span> */}
             <span className="px-4 py-2 bg-[var(--color-accent)]/20 text-[var(--color-text)] rounded-full text-sm font-medium">
               Flutter
             </span>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
