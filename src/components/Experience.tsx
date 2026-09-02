@@ -3,206 +3,201 @@
 import { useState } from "react";
 import Image from "next/image";
 import { experiences } from "@/src/data/experience";
+import { ChevronLeft, ChevronRight, Sparkles, Check } from "lucide-react";
 
 export default function Experience() {
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const currentExp = experiences[activeIndex];
+  const total = experiences.length;
+
   return (
     <section
       id="experience"
-      className="max-w-5xl mx-auto px-4 py-16 md:py-24 bg-[var(--color-primary)]"
+      className="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 md:py-28 overflow-hidden select-none"
     >
-      {/* Header */}
-      <div className="text-center mb-10 md:mb-16">
-        <div className="inline-block w-12 h-1 bg-[var(--color-accent)] mb-4"></div>
-        <h2 className="text-4xl md:text-5xl font-bold mb-3">
-          My <span className="text-[var(--color-secondary)]">Experience</span>
+      {/* Ambient Spotlight */}
+      <div className="absolute top-1/3 -right-40 w-[500px] h-[500px] rounded-full bg-[var(--color-accent)] opacity-20 blur-[150px] pointer-events-none" />
+
+      {/* ─── SECTION HEADER ─── */}
+      <div className="text-center mb-12 md:mb-16 relative z-10">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[var(--color-border-dark)] bg-[var(--color-secondary)]/80 text-[11px] font-bold tracking-widest uppercase text-stone-300 mb-4 shadow-sm">
+          <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+          <span>CAREER &amp; ACADEMIC JOURNEY</span>
+        </div>
+
+        <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tight mb-3">
+          My <span className="text-[var(--color-text)]">Experience</span>
         </h2>
-        <p className="text-[var(--color-text)]/60 text-base md:text-lg">
-          A journey of learning, growth, and hands-on experience
+        
+        <p className="text-stone-400 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
+          Perjalanan akademik, kepanitiaan, asisten laboratorium, dan pengalaman kerja profesional di bidang IT.
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6 md:gap-12 items-start">
+      {/* ─── TIMELINE + DETAIL CARD GRID ─── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start relative z-10">
 
-        {/* ── LEFT: Timeline Navigation ── */}
-        <div className="relative md:w-64 w-full flex-shrink-0">
-          {/* Vertical line background */}
-          <div className="absolute left-[19px] top-0 bottom-0 w-0.5 bg-[var(--color-text)]/10 hidden md:block" />
-
-          {/* Vertical line progress */}
-          <div
-            className="absolute left-[19px] top-0 w-0.5 bg-[var(--color-secondary)] hidden md:block transition-all duration-500"
-            style={{
-              height:
-                experiences.length === 1
-                  ? "100%"
-                  : `calc(${(activeIndex / (experiences.length - 1)) * 100}% + 20px)`,
-            }}
-          />
-
-          <div className="flex md:flex-col flex-row gap-0 overflow-x-auto md:overflow-visible pb-3 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0">
+        {/* ── LEFT: Clean Borderless Timeline (5 cols) ── */}
+        <div className="lg:col-span-5 relative w-full">
+          <div className="flex flex-col gap-1 overflow-x-auto md:overflow-visible">
             {experiences.map((exp, index) => {
               const isActive = index === activeIndex;
               const isPast = index < activeIndex;
 
               return (
-                <button
-                  key={index}
-                  onClick={() => setActiveIndex(index)}
-                  className="flex md:flex-row flex-col items-center md:items-start gap-2 md:gap-4 relative group text-left
-                             flex-shrink-0 md:flex-shrink py-2 px-3 md:px-0 md:py-2"
-                >
-                  {/* Dot */}
-                  <div
-                    className={`relative z-10 flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center
-                                border-2 transition-all duration-300
-                                ${isActive
-                                  ? "bg-[var(--color-secondary)] border-[var(--color-secondary)] shadow-lg shadow-[var(--color-secondary)]/30 scale-110"
-                                  : isPast
-                                  ? "bg-[var(--color-secondary)]/20 border-[var(--color-secondary)]/60"
-                                  : "bg-[var(--color-primary)] border-[var(--color-text)]/20 group-hover:border-[var(--color-secondary)]/50"
-                                }`}
+                <div key={index} className="relative flex items-start">
+                  
+                  {/* Perfectly Centered Connecting Segment Line */}
+                  {index < total - 1 && (
+                    <div
+                      className={`absolute left-[15px] top-8 bottom-0 w-0.5 transition-colors duration-300 z-0 ${
+                        index < activeIndex ? "bg-amber-500/80" : "bg-[#2d2011]"
+                      }`}
+                      style={{ height: "calc(100% - 2px)" }}
+                    />
+                  )}
+
+                  <button
+                    onClick={() => setActiveIndex(index)}
+                    className="flex items-start gap-4 text-left py-2 px-0 relative group w-full cursor-pointer z-10 transition-transform duration-200"
                   >
-                    {(isPast || isActive) && (
-                      <svg
-                        width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke={isActive ? "white" : "var(--color-secondary)"}
-                        strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                    {/* Centered Node Circle */}
+                    <div
+                      className={`relative flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
+                        isActive
+                          ? "bg-[#2d2011] border-stone-100 text-stone-100 shadow-[0_0_15px_rgba(232,222,209,0.35)] scale-110"
+                          : isPast
+                          ? "bg-[#1c1611] border-amber-600/70 text-amber-500"
+                          : "bg-[#0a0806] border-[#403427] text-stone-600 group-hover:border-stone-400"
+                      }`}
+                    >
+                      {isActive ? (
+                        <Check className="w-3.5 h-3.5 stroke-[3]" />
+                      ) : isPast ? (
+                        <Check className="w-3 h-3 opacity-80" />
+                      ) : (
+                        <div className="w-1.5 h-1.5 rounded-full bg-stone-600 group-hover:bg-stone-300 transition-colors" />
+                      )}
+                    </div>
+
+                    {/* Text Label without box container */}
+                    <div className="min-w-0 flex-1 pt-0.5">
+                      <p
+                        className={`text-[10px] sm:text-[11px] font-mono font-bold tracking-wider uppercase mb-0.5 transition-colors ${
+                          isActive ? "text-amber-400" : "text-stone-500 group-hover:text-stone-400"
+                        }`}
                       >
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                    )}
-                    {!isPast && !isActive && (
-                      <div className="w-2 h-2 rounded-full bg-[var(--color-text)]/20 group-hover:bg-[var(--color-secondary)]/40 transition-colors" />
-                    )}
-                  </div>
-
-                  {/* Label — desktop */}
-                  <div className="hidden md:block">
-                    <p className={`text-xs font-semibold uppercase tracking-widest mb-0.5 transition-colors
-                                   ${isActive
-                                     ? "text-[var(--color-secondary)]"
-                                     : "text-[var(--color-text)]/40 group-hover:text-[var(--color-text)]/60"}`}>
-                      {exp.year}
-                    </p>
-                    <p className={`text-sm font-medium leading-snug transition-colors
-                                   ${isActive
-                                     ? "text-[var(--color-text)]"
-                                     : "text-[var(--color-text)]/50 group-hover:text-[var(--color-text)]/70"}`}>
-                      {exp.company}
-                    </p>
-                  </div>
-
-                  {/* Mobile: start year only */}
-                  <span className="md:hidden text-[10px] text-[var(--color-text)]/50 mt-0.5">
-                    {exp.year.split(" - ")[0]}
-                  </span>
-                </button>
+                        {exp.year}
+                      </p>
+                      <p
+                        className={`text-xs sm:text-sm font-semibold truncate transition-colors ${
+                          isActive ? "text-white" : "text-stone-400 group-hover:text-stone-200"
+                        }`}
+                      >
+                        {exp.company}
+                      </p>
+                    </div>
+                  </button>
+                </div>
               );
             })}
           </div>
         </div>
 
-        {/* ── RIGHT: Active Card ── */}
-        <div className="flex-1 min-w-0">
-          {experiences.map((exp, index) => (
-            <div
-              key={index}
-              style={{ display: index === activeIndex ? "block" : "none" }}
-            >
-              <div className="bg-white dark:bg-[var(--color-primary)] border-2 border-[var(--color-text)]/10
-                              rounded-2xl overflow-hidden shadow-xl
-                              hover:border-[var(--color-secondary)]/30 transition-colors duration-300">
+        {/* ── RIGHT: Active Detailed Card (7 cols) ── */}
+        <div className="lg:col-span-7 w-full">
+          <div className="rounded-[2.2rem] overflow-hidden border border-[#403427] bg-gradient-to-br from-[#1c1611] via-[#14100c] to-[#0a0806] shadow-[0_25px_60px_rgba(0,0,0,0.9)] transition-all duration-500">
+            
+            {/* Featured Experience Image */}
+            <div className="relative h-52 sm:h-64 md:h-72 w-full overflow-hidden bg-black/80 flex items-center justify-center group/img">
+              {/* Blurred Ambient Image Background */}
+              <Image
+                src={currentExp.image}
+                alt=""
+                fill
+                className="object-cover blur-md scale-110 opacity-60 brightness-90 transition-all duration-700"
+              />
 
-                {/* Image Container */}
-                <div className="relative h-48 sm:h-56 w-full overflow-hidden bg-[var(--color-primary)] flex items-center justify-center group/image">
-                  {/* Blurred Background Image (Foto yang sama, dibelakang) */}
-                  <Image
-                    src={exp.image}
-                    alt=""
-                    fill
-                    className="object-cover blur-sm scale-105 opacity-80 brightness-100 saturate-100"
-                  />
-                  
-                  {/* Backdrop tint (biar teks & border jelas, dan fokus utamanya tetap ke gambar di depan) */}
-                  <div className="absolute inset-0 bg-black/40 pointer-events-none" />
+              <div className="absolute inset-0 bg-black/40 pointer-events-none" />
 
-                  {/* Main Centered Image (di depan) */}
-                  <div className="relative w-full h-full flex items-center justify-center z-10 p-2 md:p-4 drop-shadow-2xl">
-                    <Image
-                      src={exp.image}
-                      alt={exp.company}
-                      fill
-                      className="object-contain transition-transform duration-700 group-hover/image:scale-105"
-                    />
-                  </div>
-                  
-                  {/* Gradient Overlay for Text Readability */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none z-10" />
-                  
-                  {/* Text */}
-                  <div className="absolute bottom-4 left-5 right-5 pointer-events-none z-20">
-                    <p className="text-white/80 text-xs font-bold uppercase tracking-widest mb-1">
-                      {exp.year}
-                    </p>
-                    <h3 className="text-white text-xl md:text-2xl font-bold leading-tight drop-shadow-md">
-                      {exp.title}
-                    </h3>
-                  </div>
-                </div>
+              {/* Main Crisp Center Image */}
+              <div className="relative w-full h-full flex items-center justify-center z-10 p-3 sm:p-5 drop-shadow-2xl">
+                <Image
+                  src={currentExp.image}
+                  alt={currentExp.company}
+                  fill
+                  className="object-contain transition-transform duration-700 group-hover/img:scale-105"
+                />
+              </div>
 
-                {/* Body */}
-                <div className="p-4 md:p-8">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-1 h-8 rounded-full bg-[var(--color-secondary)]" />
-                    <div>
-                      <p className="text-[var(--color-secondary)] font-bold text-lg leading-tight">
-                        {exp.company}
-                      </p>
-                      <p className="text-[var(--color-text)]/40 text-xs">{exp.year}</p>
-                    </div>
-                  </div>
+              {/* Bottom Vignette Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#14100c] via-black/20 to-transparent pointer-events-none z-10" />
 
-                  <p className="text-[var(--color-text)]/70 leading-relaxed text-sm md:text-base">
-                    {exp.description}
-                  </p>
-
-                  {/* Navigation */}
-                  <div className="flex items-center gap-3 mt-6 pt-5 border-t border-[var(--color-text)]/8">
-                    <button
-                      onClick={() =>
-                        setActiveIndex((p) => (p === 0 ? experiences.length - 1 : p - 1))
-                      }
-                      className="w-9 h-9 rounded-full border-2 border-[var(--color-text)]/15 flex items-center justify-center
-                                 hover:border-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:text-white
-                                 text-[var(--color-text)]/50 transition-all duration-200"
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="15 18 9 12 15 6" />
-                      </svg>
-                    </button>
-                    <button
-                      onClick={() =>
-                        setActiveIndex((p) => (p === experiences.length - 1 ? 0 : p + 1))
-                      }
-                      className="w-9 h-9 rounded-full border-2 border-[var(--color-text)]/15 flex items-center justify-center
-                                 hover:border-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:text-white
-                                 text-[var(--color-text)]/50 transition-all duration-200"
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="9 18 15 12 9 6" />
-                      </svg>
-                    </button>
-                    <span className="text-xs text-[var(--color-text)]/30 ml-1">
-                      Use arrows or click timeline
-                    </span>
-                  </div>
-                </div>
+              {/* Header Title (Clean without Year Badge on Image) */}
+              <div className="absolute bottom-4 left-5 right-5 pointer-events-none z-20">
+                <h3 className="text-white text-xl sm:text-2xl md:text-3xl font-black leading-tight drop-shadow-md">
+                  {currentExp.title}
+                </h3>
               </div>
             </div>
-          ))}
+
+            {/* Experience Body Content */}
+            <div className="p-6 sm:p-8">
+              <div className="flex items-center gap-3.5 mb-5 pb-4 border-b border-white/5">
+                <div className="w-1.5 h-10 rounded-full bg-gradient-to-b from-amber-500 to-[#e8ded1]" />
+                <div>
+                  <h4 className="text-white font-bold text-lg sm:text-xl leading-tight">
+                    {currentExp.company}
+                  </h4>
+                  <p className="text-stone-400 text-xs sm:text-sm mt-0.5">
+                    Verified Experience · {currentExp.year}
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-stone-300/90 leading-relaxed text-sm sm:text-base mb-8">
+                {currentExp.description}
+              </p>
+
+              {/* Navigation & Controls */}
+              <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                <div className="flex items-center gap-2.5">
+                  <button
+                    onClick={() =>
+                      setActiveIndex((p) => (p === 0 ? total - 1 : p - 1))
+                    }
+                    className="p-3 rounded-full bg-[#14100c] border border-[#403427] text-stone-300 hover:text-white hover:border-stone-400 hover:bg-[#2d2011] hover:scale-110 active:scale-95 transition-all shadow-md"
+                    title="Previous Experience"
+                    aria-label="Previous Experience"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      setActiveIndex((p) => (p === total - 1 ? 0 : p + 1))
+                    }
+                    className="p-3 rounded-full bg-[#14100c] border border-[#403427] text-stone-300 hover:text-white hover:border-stone-400 hover:bg-[#2d2011] hover:scale-110 active:scale-95 transition-all shadow-md"
+                    title="Next Experience"
+                    aria-label="Next Experience"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="text-right">
+                  <span className="text-xs font-mono text-stone-400">
+                    <strong className="text-stone-200">{activeIndex + 1}</strong> / {total} Experiences
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
         </div>
+
       </div>
     </section>
   );

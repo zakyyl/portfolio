@@ -1,65 +1,116 @@
-import SectionTitle from "./SectionTitle";
+"use client";
+
+import { ArrowUpRight, ArrowUp } from "lucide-react";
 
 const contactLinks = [
   {
+    index: "01",
     name: "Email",
+    value: "zaky24112003@gmail.com",
     href: "mailto:zaky24112003@gmail.com",
-    label: "zaky24112003@gmail.com"
+    indentClass: "md:w-[88%] md:ml-0",
+    hoverColor: "group-hover:border-amber-400 group-hover:text-amber-300",
   },
   {
+    index: "02",
     name: "LinkedIn",
+    value: "linkedin.com/in/zaky-ramadhakara",
     href: "https://www.linkedin.com/in/zaky-ramadhakara",
-    label: "linkedin.com/in/zaky-ramadhakara"
+    indentClass: "md:w-[88%] md:ml-[6%]",
+    hoverColor: "group-hover:border-sky-400 group-hover:text-sky-300",
   },
   {
+    index: "03",
     name: "GitHub",
+    value: "github.com/zakyyl",
     href: "https://github.com/zakyyl",
-    label: "github.com/zakyyl"
-  }
+    indentClass: "md:w-[88%] md:ml-[12%]",
+    hoverColor: "group-hover:border-stone-300 group-hover:text-stone-200",
+  },
 ];
 
 export default function Contact() {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <section
       id="contact"
-      className="max-w-4xl mx-auto px-4 py-16 md:py-24 bg-[var(--color-primary)]"
+      className="relative max-w-5xl mx-auto px-4 sm:px-6 pt-20 pb-12 md:pt-28 md:pb-16 overflow-hidden select-none"
     >
-      <div className="mb-8">
-        <div className="inline-block w-12 h-1 bg-[var(--color-accent)] mb-4"></div>
-        <h2 className="text-3xl md:text-4xl font-bold mb-3">
-          Get <span className="text-[var(--color-secondary)]">In Touch</span>
+      {/* Ambient Glow */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-[var(--color-accent)] opacity-20 blur-[150px] pointer-events-none" />
+
+      {/* ─── SECTION HEADER ─── */}
+      <div className="mb-14 md:mb-18 relative z-10">
+        <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tight mb-3">
+          Get In <span className="text-[var(--color-text)]">Touch</span>
         </h2>
-        <p className="text-[var(--color-text)]/60 text-base md:text-lg">
-          Feel free to reach out for collaborations.
+        
+        <p className="text-stone-400 text-sm sm:text-base max-w-md leading-relaxed">
+          Tertarik berkolaborasi atau memiliki peluang proyek? Hubungi saya melalui tautan di bawah ini.
         </p>
       </div>
 
-      <div className="space-y-4">
+      {/* ─── MINIMALIST STEPPED STAIR ROWS ("Nangga Turun") ─── */}
+      <div className="space-y-4 md:space-y-6 mb-20 relative z-10">
         {contactLinks.map((contact) => (
-          <a
+          <div
             key={contact.name}
-            href={contact.href}
-            target={contact.name !== "Email" ? "_blank" : undefined}
-            rel={contact.name !== "Email" ? "noopener noreferrer" : undefined}
-            className="flex items-center justify-between p-4 
-                       border-b border-[var(--color-text)]/10
-                       hover:border-[var(--color-secondary)]
-                       group transition-all"
+            className={`w-full transition-all duration-300 ${contact.indentClass}`}
           >
-            <div>
-              <div className="font-semibold text-[var(--color-text)] mb-1">
-                {contact.name}
+            <a
+              href={contact.href}
+              target={contact.name !== "Email" ? "_blank" : undefined}
+              rel={contact.name !== "Email" ? "noopener noreferrer" : undefined}
+              className="group flex items-center justify-between py-5 sm:py-6 border-b border-[#403427] hover:border-white/80 transition-all duration-300 cursor-pointer"
+            >
+              {/* Left Side: Number & Name */}
+              <div className="flex items-center gap-4 sm:gap-6">
+                <span className="text-xs sm:text-sm font-mono font-bold text-stone-500 group-hover:text-stone-300 transition-colors">
+                  /{contact.index}
+                </span>
+
+                <div>
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-black text-white group-hover:text-amber-200 transition-colors">
+                    {contact.name}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-stone-400 group-hover:text-stone-300 transition-colors">
+                    {contact.value}
+                  </p>
+                </div>
               </div>
-              <div className="text-xs sm:text-sm text-[var(--color-text)]/60 break-all">
-                {contact.label}
+
+              {/* Right Side: Arrow Action */}
+              <div className="flex items-center gap-2 text-stone-500 group-hover:text-white transition-colors">
+                <span className="text-xs font-semibold uppercase tracking-wider hidden sm:inline-block opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                  Kunjungi
+                </span>
+                <div className="p-2 rounded-full border border-transparent group-hover:border-white/20 group-hover:bg-white/5 transition-all">
+                  <ArrowUpRight className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </div>
               </div>
-            </div>
-            <span className="text-[var(--color-secondary)] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-              →
-            </span>
-          </a>
+            </a>
+          </div>
         ))}
       </div>
+
+      {/* ─── MINIMALIST CLEAN FOOTER ─── */}
+      <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500 relative z-10">
+        <p className="font-semibold text-stone-400 tracking-wider">
+          ZAKY RAMADHAKARA · SOFTWARE ENGINEER
+        </p>
+
+        <button
+          onClick={scrollToTop}
+          className="flex items-center gap-1.5 text-stone-400 hover:text-white transition-colors cursor-pointer py-1 px-2.5 rounded-lg hover:bg-white/5"
+        >
+          <span>Kembali ke atas</span>
+          <ArrowUp className="w-3.5 h-3.5" />
+        </button>
+      </div>
+
     </section>
   );
 }

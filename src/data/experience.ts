@@ -4,23 +4,31 @@ export const experiences = [
     company: "Universitas Dinamika Bangsa",
     year: "2021 - 2025",
     description:
-      "Built responsive web applications using Laravel and React for various clients.",
+      "Menempuh studi di bidang Rekayasa Perangkat Lunak & Ilmu Komputer, mendalami pengembangan web fullstack, aplikasi mobile, perancangan basis data, dan arsitektur sistem perangkat lunak.",
     image: "/images/experiences/unamak.jpg",
   },
-    {
-    title: "Assistant Laboratorium",
-    company: "Assistant Laboratorium",
+  {
+    title: "Assistant Laboratorium Komputer",
+    company: "Laboratorium Komputer UNAMA",
     year: "2021 - 2025",
     description:
-      "Built responsive web applications using Laravel and React for various clients.",
+      "Membimbing mahasiswa dalam sesi praktikum pemrograman, mengelola serta memelihara infrastruktur komputer laboratorium, dan membantu dosen dalam evaluasi teknis praktikum.",
     image: "/images/experiences/aslab.png",
+  },
+  {
+    title: "Panitia Seleksi CAT Akademik",
+    company: "CAT Polda Jambi",
+    year: "2023 - 2024",
+    description:
+      "Berperan dalam pelaksanaan teknis ujian Computer Assisted Test (CAT) penerimaan POLDA Jambi, memastikan kesiapan unit workstation, keandalan jaringan lokal server CAT, dan kelancaran proses seleksi.",
+    image: "/images/experiences/catpolda.jpeg",
   },
   {
     title: "Program Kampus Merdeka - Study Independen",
     company: "Alterra Academy",
     year: "2023 - 2024",
     description:
-      "Worked on multiple freelance projects, creating custom solutions for small businesses.",
+      "Mengikuti program intensif Flutter & Mobile Development, membangun aplikasi mobile terintegrasi REST API dengan standar clean architecture dan state management modern.",
     image: "/images/experiences/stupen.png",
   },
   {
@@ -28,7 +36,7 @@ export const experiences = [
     company: "Academic Seminar Operator",
     year: "2023 - 2025",
     description:
-      "Provided technical support for academic paper seminars, handling audiovisual systems, supporting presenters, and maintaining smooth seminar operations.",
+      "Memberikan dukungan teknis pada seminar akademik dan sidang karya ilmiah, mengoperasikan sistem audiovisual, mendukung kebutuhan presentasi, serta menjaga kelancaran jalannya acara.",
     image: "/images/experiences/opeyator.jpeg",
   },
   {
@@ -36,7 +44,7 @@ export const experiences = [
     company: "Orientation Committee",
     year: "2023 - 2025",
     description:
-      "Served as a committee member for student orientation, coordinating activities, assisting new students, and ensuring smooth event execution.",
+      "Bertindak sebagai panitia orientasi mahasiswa baru, mengoordinasikan rangkaian kegiatan pengenalan kampus, mendampingi peserta, dan memastikan acara berlangsung dengan tertib dan lancar.",
     image: "/images/experiences/platinum.png",
   },
   {
@@ -44,7 +52,7 @@ export const experiences = [
     company: "Graduation Committee",
     year: "2023 - 2025",
     description:
-      "Participated as a graduation committee member, supporting event preparation, managing logistics, and ensuring the graduation ceremony ran smoothly.",
+      "Berpartisipasi aktif sebagai panitia wisuda, mengelola persiapan teknis dan logistik acara, serta memastikan kelancaran dan ketertiban prosesi upacara wisuda sarjana.",
     image: "/images/experiences/wisuda.png",
   },
   {
@@ -52,15 +60,15 @@ export const experiences = [
     company: "Celerates Academy",
     year: "2024 - 2025",
     description:
-      "Worked on multiple freelance projects, creating custom solutions for small businesses.",
+      "Mengikuti pelatihan intensif Fullstack Web Development, merancang arsitektur backend REST API, pemodelan database relasional, dan integrasi antarmuka web modern.",
     image: "/images/experiences/celerates.jpg",
   },
   {
-    title: "IT Programmer",
+    title: "Software Engineer",
     company: "RS Bhayangkara Jambi",
     year: "2025 - 2026",
     description:
-      "Developing and maintaining hospital management systems, focusing on patient data management and medical records.",
+      "Mengembangkan dan memelihara sistem informasi manajemen rumah sakit (SIMRS), berfokus pada digitalisasi rekam medis, integrasi alur kerja pelayanan klinis, dan pengelolaan data pasien.",
     image: "/images/experiences/unnamed.webp",
   },
 ];

@@ -1,105 +1,116 @@
+import Image from "next/image";
+import { Montserrat } from "next/font/google";
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["800", "900"],
+  display: "swap",
+});
+
 export default function Hero() {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-[var(--color-primary)] relative overflow-hidden">
+    <section
+      id="hero"
+      className="relative h-screen max-h-screen w-full bg-[var(--color-primary)] overflow-hidden select-none"
+    >
+      {/* ─── AMBIENT WARM LIGHTING BACKGROUND ─── */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#18130e] via-[#110e0a] to-[var(--color-primary)] pointer-events-none" />
 
-      <div className="relative z-10 text-center mb-6">
-        <h1 className="text-[16vw] sm:text-[12vw] md:text-[8vw] lg:text-[7rem] xl:text-[8rem] font-black leading-none tracking-tight">
-          ZAVE<span className="text-[var(--color-secondary)]">.</span>
-        </h1>
+      {/* Center Spotlight Glow behind typography & portrait */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] rounded-full bg-[var(--color-accent)] opacity-40 blur-[130px] pointer-events-none" />
+
+      {/* Subtle Tech Grid Texture */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(#e8ded1 1px, transparent 1px), linear-gradient(90deg, #e8ded1 1px, transparent 1px)`,
+          backgroundSize: "50px 50px",
+        }}
+      />
+
+      {/* ─── 4-CORNER LABELS & LINKS (Floating inside Hero) ─── */}
+      {/* Top-Left */}
+      <div className="absolute top-20 left-6 md:left-12 z-40 flex items-center gap-2 text-[11px] md:text-xs font-bold tracking-[0.2em] uppercase text-[#e8ded1]/80">
+        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+        <span></span>
       </div>
 
-      <div className="relative z-0 my-6 md:my-8">
-        <div className="w-40 h-40 md:w-48 md:h-48 lg:w-40 lg:h-40 relative">
-          <div className="absolute inset-0 rounded-full border-2 border-[var(--color-accent)]/30"
-            style={{
-              animation: 'spin 20s linear infinite'
-            }}>
-          </div>
-
-          <div className="absolute inset-8 rounded-full border-2 border-[var(--color-secondary)]/40"
-            style={{
-              animation: 'spin 15s linear infinite reverse'
-            }}>
-          </div>
-
-          <div className="absolute inset-0 flex items-center justify-center animate-pulse">
-            <svg width="60" height="60" viewBox="0 0 120 120" className="md:w-[70px] md:h-[70px]">
-              <path
-                d="M 60 20 L 100 80 L 20 80 Z"
-                fill="none"
-                stroke="var(--color-secondary)"
-                strokeWidth="3"
-                className="opacity-60"
-              />
-              <path
-                d="M 60 35 L 85 70 L 35 70 Z"
-                fill="var(--color-accent)"
-                className="opacity-40"
-              />
-            </svg>
-          </div>
-
-          <div className="absolute -top-2 -left-2 w-5 h-5 md:w-6 md:h-6 border-t-2 border-l-2 border-[var(--color-accent)]"></div>
-          <div className="absolute -bottom-2 -right-2 w-5 h-5 md:w-6 md:h-6 border-b-2 border-r-2 border-[var(--color-secondary)]"></div>
-        </div>
+      {/* Top-Right */}
+      <div className="absolute top-20 right-6 md:right-12 z-40 text-right text-[11px] md:text-xs font-bold tracking-[0.2em] uppercase text-stone-400">
+        <span>SOFTWARE ENGINEER</span>
       </div>
 
-      <div className="relative z-10 max-w-4xl w-full mt-6 md:mt-8 px-4 mx-auto text-center">
-        <div className="grid place-items-center">
-          <div>
-            <div className="text-xs text-[var(--color-text)]/50 mb-1">
-              Expertise
-            </div>
-            <p className="text-sm md:text-base text-[var(--color-text)]/70">
-              Building {" "}
-              <strong className="text-[var(--color-secondary)]">Reliable</strong> and{" "}
-              <strong className="text-[var(--color-secondary)]">Scalable</strong> Web Systems
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-4 md:mt-6 border-t border-dotted border-[var(--color-text)]/20"></div>
+      {/* Bottom-Left */}
+      <div className="absolute bottom-6 left-6 md:left-12 z-40 text-xs md:text-sm font-bold tracking-[0.2em] uppercase text-[#e8ded1]/85">
+        <a
+          href="https://github.com/zakyyl"
+          target="_blank"
+          rel="noreferrer"
+          className="hover:text-white transition-colors underline underline-offset-4"
+        >
+          GITHUB
+        </a>
       </div>
 
-
-      <div className="absolute top-1/3 left-4 md:left-6 hidden lg:block">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="flex -space-x-1.5">
-            <div className="w-6 h-6 rounded-full bg-[var(--color-secondary)] border-2 border-[var(--color-primary)]"></div>
-            <div className="w-6 h-6 rounded-full bg-[var(--color-accent)] border-2 border-[var(--color-primary)]"></div>
-            <div className="w-6 h-6 rounded-full bg-[var(--color-secondary)]/60 border-2 border-[var(--color-primary)]"></div>
-          </div>
-          <span className="text-lg md:text-xl font-bold text-[var(--color-text)]"></span>
-        </div>
-        <div className="text-xs text-[var(--color-text)]/60">SOFTWARE DEVELOPER</div>
+      {/* Bottom-Right */}
+      <div className="absolute bottom-6 right-6 md:right-12 z-40 text-xs md:text-sm font-bold tracking-[0.2em] uppercase text-[#e8ded1]/85">
+        <a
+          href="https://www.linkedin.com/in/zaky-ramadhakara"
+          target="_blank"
+          rel="noreferrer"
+          className="hover:text-white transition-colors underline underline-offset-4"
+        >
+          LINKEDIN
+        </a>
       </div>
 
-      <div className="absolute top-1/3 right-4 md:right-6 text-right hidden lg:block space-y-2">
-        <div>
-          <div className="text-xs text-[var(--color-text)]/50">/01</div>
-          <div className="text-sm font-semibold text-[var(--color-text)]/80">Laravel</div>
-        </div>
-        <div>
-          <div className="text-xs text-[var(--color-text)]/50">/02</div>
-          <div className="text-sm font-semibold text-[var(--color-text)]/80">React</div>
-        </div>
-        <div>
-          <div className="text-xs text-[var(--color-text)]/50">/03</div>
-          <div className="text-sm font-semibold text-[var(--color-text)]/80">Flutter</div>
-        </div>
-        <div>
-          <div className="text-xs text-[var(--color-text)]/50">/04</div>
-          <div className="text-sm font-semibold text-[var(--color-text)]/80">Next</div>
+      {/* ─── CENTER COMPOSITION: 3D LAYERED TEXT & CUTOUT ─── */}
+      {/* ── LAYER 1 (BACK): Solid Giant Typography ── */}
+      <div
+        className={`absolute inset-0 flex flex-col items-center justify-center text-center leading-[0.88] uppercase z-10 pointer-events-none ${montserrat.className}`}
+      >
+        <span className="text-[12vw] sm:text-[11vw] md:text-[100px] lg:text-[125px] xl:text-[145px] font-black tracking-tight text-[#e8ded1] drop-shadow-2xl">
+          PORTFOLIO
+        </span>
+        <span className="text-[5.8vw] sm:text-[5.2vw] md:text-[48px] lg:text-[60px] xl:text-[70px] font-black tracking-wider text-[#e8ded1] drop-shadow-2xl mt-1">
+          ZAKY RAMADHAKARA
+        </span>
+      </div>
+
+      {/* ── LAYER 2 (MIDDLE): Full-Height Centered Cutout Photo (TRANS.png) ── */}
+      <div className="absolute inset-x-0 bottom-0 h-[78vh] sm:h-[82vh] md:h-[86vh] lg:h-[90vh] flex items-end justify-center z-20 pointer-events-none">
+        <div className="relative w-[340px] sm:w-[440px] md:w-[540px] lg:w-[620px] h-full">
+          <Image
+            src="/images/TRANS.png"
+            alt="Zaky Ramadhakara - Portfolio"
+            fill
+            sizes="(max-width: 768px) 90vw, 620px"
+            className="object-contain object-bottom drop-shadow-[0_20px_50px_rgba(0,0,0,0.95)]"
+            priority
+          />
         </div>
       </div>
 
-      <div className="absolute inset-0 pointer-events-none select-none opacity-5">
-        <svg className="absolute top-20 left-1/4 w-32 h-32" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="40" fill="none" stroke="var(--color-accent)" strokeWidth="1" />
-        </svg>
-        <svg className="absolute bottom-32 right-1/4 w-24 h-24" viewBox="0 0 100 100">
-          <rect x="25" y="25" width="50" height="50" fill="none" stroke="var(--color-secondary)" strokeWidth="1" />
-        </svg>
+      {/* ── LAYER 3 (FRONT): Stroke / Wireframe Outlined Text ── */}
+      <div
+        className={`absolute inset-0 flex flex-col items-center justify-center text-center leading-[0.88] uppercase z-30 pointer-events-none ${montserrat.className}`}
+      >
+        <span
+          className="text-[12vw] sm:text-[11vw] md:text-[100px] lg:text-[125px] xl:text-[145px] font-black tracking-tight text-transparent"
+          style={{
+            WebkitTextStroke: "1.5px #e8ded1",
+          }}
+        >
+          PORTFOLIO
+        </span>
+        <span
+          className="text-[5.8vw] sm:text-[5.2vw] md:text-[48px] lg:text-[60px] xl:text-[70px] font-black tracking-wider text-transparent mt-1"
+          style={{
+            WebkitTextStroke: "1.5px #e8ded1",
+          }}
+        >
+          ZAKY RAMADHAKARA
+        </span>
       </div>
     </section>
   );

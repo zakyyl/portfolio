@@ -1,18 +1,29 @@
 @import "tailwindcss";
+@config "../../tailwind.config.js";
+
+@theme {
+  --color-primary: #000000;
+  --color-secondary: #171717;
+  --color-accent: #2d2011;
+  --color-textlight: #51463b;
+  --color-text: #61574d;
+}
 
 :root {
-  --color-primary: #ffffff;
-  --color-secondary: #dc2626;
-  --color-accent: #facc15;
-  --color-text: #0f172a;
+  --color-primary: #000000;
+  --color-secondary: #171717;
+  --color-accent: #2d2011;
+  --color-text: #61574d;
 }
+
 /* Dark mode */
 [data-theme="dark"] {
-  --color-primary: #0b0f1a;
-  --color-secondary: #f87171;
-  --color-accent: #fde047;
-  --color-text: #e5e7eb;
+  --color-primary: #000000;
+  --color-secondary: #171717;
+  --color-accent: #2d2011;
+  --color-text: #61574d;
 }
+
 * {
   box-sizing: border-box;
 }
