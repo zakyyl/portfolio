@@ -16,20 +16,20 @@ export const experiences = [
     image: "/images/experiences/aslab.png",
   },
   {
-    title: "Panitia Seleksi CAT Akademik",
-    company: "CAT Polda Jambi",
-    year: "2023 - 2024",
-    description:
-      "Berperan dalam pelaksanaan teknis ujian Computer Assisted Test (CAT) penerimaan POLDA Jambi, memastikan kesiapan unit workstation, keandalan jaringan lokal server CAT, dan kelancaran proses seleksi.",
-    image: "/images/experiences/catpolda.jpeg",
-  },
-  {
     title: "Program Kampus Merdeka - Study Independen",
     company: "Alterra Academy",
     year: "2023 - 2024",
     description:
       "Mengikuti program intensif Flutter & Mobile Development, membangun aplikasi mobile terintegrasi REST API dengan standar clean architecture dan state management modern.",
     image: "/images/experiences/stupen.png",
+  },
+  {
+    title: "Panitia Seleksi CAT Akademik",
+    company: "CAT Polda Jambi",
+    year: "2023 - 2025",
+    description:
+      "Berperan dalam pelaksanaan teknis ujian Computer Assisted Test (CAT) penerimaan POLDA Jambi, memastikan kesiapan unit workstation, keandalan jaringan lokal server CAT, dan kelancaran proses seleksi.",
+    image: "/images/experiences/catpolda.jpeg",
   },
   {
     title: "Academic Seminar Operator",
@@ -68,7 +68,7 @@ export const experiences = [
     company: "RS Bhayangkara Jambi",
     year: "2025 - 2026",
     description:
-      "Mengembangkan dan memelihara sistem informasi manajemen rumah sakit (SIMRS), berfokus pada digitalisasi rekam medis, integrasi alur kerja pelayanan klinis, dan pengelolaan data pasien.",
+      "Mengembangkan dan memelihara sistem informasi manajemen rumah sakit, berfokus pada digitalisasi rekam medis, integrasi alur kerja pelayanan klinis, dan pengelolaan data pasien.",
     image: "/images/experiences/unnamed.webp",
   },
 ];

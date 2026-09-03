@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
-import { Sparkles, Code2, Smartphone, Server, Wrench, ChevronRight } from "lucide-react";
+import { Code2, Smartphone, Server, Wrench, ChevronRight } from "lucide-react";
 
 interface SkillCard {
   id: string;
@@ -211,9 +211,9 @@ function InteractiveCardDeck() {
   };
 
   return (
-    <div className="relative w-full flex items-center justify-center gap-3 sm:gap-5 py-6">
+    <div className="relative w-full flex items-center justify-center gap-1.5 sm:gap-5 py-4 sm:py-6">
       {/* 3D Stack Container with High-Visibility Fanning Layers */}
-      <div className="relative w-[300px] sm:w-[340px] md:w-[370px] h-[460px] md:h-[490px]">
+      <div className="relative w-[275px] xs:w-[300px] sm:w-[340px] md:w-[370px] h-[430px] sm:h-[460px] md:h-[490px]">
         <AnimatePresence mode="popLayout">
           {deck.slice(0, 4).map((card, index) => {
             const isTop = index === 0;
@@ -388,24 +388,17 @@ export default function Skills() {
   return (
     <section 
       id="skills" 
-      className="relative max-w-6xl mx-auto px-6 lg:px-8 py-20 md:py-28 overflow-hidden"
+      className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-28 overflow-hidden"
     >
       {/* Section Ambient Glow */}
       <div className="absolute top-1/3 -left-40 w-[500px] h-[500px] rounded-full bg-[var(--color-accent)] opacity-20 blur-[140px] pointer-events-none" />
 
       {/* ─── 2-COLUMN SPLIT LAYOUT ─── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center relative z-10">
         
         {/* ─── LEFT COLUMN: Description & Ecosystem Highlights (5 cols) ─── */}
         <div className="lg:col-span-5 flex flex-col items-start text-left">
-          
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[var(--color-border-dark)] bg-[var(--color-secondary)]/80 text-[11px] font-bold tracking-widest uppercase text-stone-300 mb-6 shadow-sm">
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span>TECH STACK &amp; ECOSYSTEM</span>
-          </div>
-          
-          <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight mb-4 leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-3 leading-tight">
             Skills &amp; <span className="text-[var(--color-text)]">Tools</span>
           </h2>
           

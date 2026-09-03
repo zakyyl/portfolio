@@ -1,10 +1,10 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Zave | Web Developer",
-  description: "Web Developer specializing in Laravel & React",
+  title: "Zaky Ramadhakara | Portfolio",
+  description: "Web Developer specializing in Laravel, Next.js & Flutter",
   icons: {
-    icon: "/images/zave-square.png",
+    icon: "/images/favico.png",
   },
 };
 

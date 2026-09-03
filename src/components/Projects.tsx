@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { projects } from "@/src/data/projects";
-import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const GithubIcon = () => (
   <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current">
@@ -35,6 +35,33 @@ export default function Projects() {
     setTimeout(() => setIsAnimating(false), 380);
   };
 
+  // Touch swipe support for mobile
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const minSwipeDistance = 45;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    if (isLeftSwipe) {
+      navigate(1);
+    } else if (isRightSwipe) {
+      navigate(-1);
+    }
+  };
+
   // Posisi kartu: left-far, left, center, right, right-far
   const cardPositions = [-2, -1, 0, 1, 2];
 
@@ -43,7 +70,7 @@ export default function Projects() {
     const absOffset = Math.abs(offset);
     
     const scale = offset === 0 ? 1 : absOffset === 1 ? (isMobile ? 0.82 : 0.85) : (isMobile ? 0.65 : 0.72);
-    const baseTranslateX = isMobile ? 130 : 260;
+    const baseTranslateX = isMobile ? 120 : 260;
     const translateX = offset * baseTranslateX;
     const translateZ = offset === 0 ? 0 : absOffset === 1 ? -90 : -180;
     const rotateY = offset * (isMobile ? -10 : -8);
@@ -65,23 +92,18 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="relative min-h-screen md:h-screen md:max-h-screen w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col justify-center py-10 md:py-12 overflow-hidden select-none"
+      className="relative min-h-screen md:h-screen md:max-h-screen w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col justify-center py-12 md:py-12 overflow-hidden select-none"
     >
       {/* Ambient Spotlight Behind Carousel */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[320px] rounded-full bg-[var(--color-accent)] opacity-25 blur-[140px] pointer-events-none" />
 
       {/* ─── SECTION HEADER (Compact In-Frame) ─── */}
-      <div className="text-center mb-6 md:mb-8 relative z-10">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--color-border-dark)] bg-[var(--color-secondary)]/80 text-[10px] font-bold tracking-widest uppercase text-stone-300 mb-2.5 shadow-sm">
-          <Sparkles className="w-3 h-3 text-amber-500" />
-          <span>PORTFOLIO SHOWCASE</span>
-        </div>
-
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-1.5">
+      <div className="text-center mb-5 md:mb-8 relative z-10">
+        <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-1.5">
           Featured <span className="text-[var(--color-text)]">Projects</span>
         </h2>
         
-        <p className="text-stone-400 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
+        <p className="text-stone-400 text-xs sm:text-sm max-w-md mx-auto leading-relaxed px-2">
           Koleksi sistem web, mobile apps, dan aplikasi digital yang telah saya kembangkan.
         </p>
       </div>
@@ -94,15 +116,18 @@ export default function Projects() {
         {/* Left Arrow Button */}
         <button
           onClick={() => navigate(-1)}
-          className="absolute left-2 md:left-6 z-50 p-3 rounded-full bg-[#1c1611]/80 backdrop-blur-md border border-[#403427] text-stone-300 hover:text-white hover:border-stone-400 hover:bg-[#2d2011] hover:scale-110 active:scale-95 transition-all shadow-2xl"
+          className="absolute left-1 sm:left-2 md:left-6 z-50 p-2.5 sm:p-3 rounded-full bg-[#1c1611]/80 backdrop-blur-md border border-[#403427] text-stone-300 hover:text-white hover:border-stone-400 hover:bg-[#2d2011] hover:scale-110 active:scale-95 transition-all shadow-2xl cursor-pointer"
           aria-label="Previous Project"
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
 
         {/* 3D Cards Container */}
         <div
-          className="relative w-full flex items-center justify-center h-full"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          className="relative w-full flex items-center justify-center h-full touch-pan-y"
           style={{ perspective: "1400px" }}
         >
           {cardPositions.map((offset) => {
@@ -214,21 +239,6 @@ export default function Projects() {
         </button>
       </div>
 
-      {/* ─── DOT PAGINATION INDICATORS ─── */}
-      <div className="flex justify-center items-center gap-2 mt-4 md:mt-6 relative z-50">
-        {projects.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => !isAnimating && setActiveIndex(i)}
-            className={`rounded-full transition-all duration-300 ${
-              i === activeIndex
-                ? "w-6 h-2 bg-stone-200 shadow-md shadow-stone-200/20"
-                : "w-2 h-2 bg-[#403427] hover:bg-stone-500"
-            }`}
-            aria-label={`Go to project ${i + 1}`}
-          />
-        ))}
-      </div>
     </section>
   );
 }
