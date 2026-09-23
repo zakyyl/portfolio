@@ -9,7 +9,7 @@ export const experiences = [
   },
   {
     title: "Assistant Laboratorium Komputer",
-    company: "Laboratorium Komputer UNAMA",
+    company: "Computer Lab UNAMA",
     year: "2021 - 2025",
     description:
       "Membimbing mahasiswa dalam sesi praktikum pemrograman, mengelola serta memelihara infrastruktur komputer laboratorium, dan membantu dosen dalam evaluasi teknis praktikum.",
