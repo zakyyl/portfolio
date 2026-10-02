@@ -98,6 +98,6 @@ export const projects = [
       "Aplikasi Layanan AC Profesional & Sistem Reservasi Terpadu.",
     tech: ["Flutter", "Laravel"],
     github: "https://github.com/Suhu-App",
-    image: "/images/projects/suhu.jfif",
+    image: "/images/projects/suhu.png",
   },
 ];
