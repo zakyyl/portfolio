@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Anton } from "next/font/google";
-import { X, ExternalLink } from "lucide-react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { projects } from "@/src/data/projects";
 
@@ -58,7 +57,6 @@ const column3 = [
 ];
 
 export default function Projects() {
-  const [selectedProj, setSelectedProj] = useState<(typeof projectsWithDimensions)[0] | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
   const containerRef = useRef<HTMLElement>(null);
 
@@ -152,7 +150,6 @@ export default function Projects() {
                 key={item.title}
                 item={item}
                 index={idx}
-                onClick={() => setSelectedProj(item)}
               />
             ))}
           </motion.div>
@@ -167,7 +164,6 @@ export default function Projects() {
                 key={item.title}
                 item={item}
                 index={idx}
-                onClick={() => setSelectedProj(item)}
               />
             ))}
           </motion.div>
@@ -182,7 +178,6 @@ export default function Projects() {
                 key={item.title}
                 item={item}
                 index={idx}
-                onClick={() => setSelectedProj(item)}
               />
             ))}
           </motion.div>
@@ -190,99 +185,23 @@ export default function Projects() {
         </div>
 
       </div>
-
-      {/* ── DETAIL MODAL (LIGHTBOX) ── */}
-      {selectedProj && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#050606]/85 backdrop-blur-md transition-all"
-          onClick={() => setSelectedProj(null)}
-        >
-          <div
-            className="relative w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl border border-[#1C202A] bg-gradient-to-br from-[#1C202A] via-[#111318] to-[#050606] text-[#F4F5E7]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Image */}
-            <div className="relative w-full h-64 sm:h-80 bg-[#050606]">
-              <Image
-                src={selectedProj.image}
-                alt={selectedProj.title}
-                fill
-                className="object-contain p-4"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#111318] via-[#050606]/20 to-transparent" />
-
-              {/* Close Button */}
-              <button
-                onClick={() => setSelectedProj(null)}
-                className="absolute top-4 right-4 p-2 rounded-full bg-[#050606]/80 text-[#85898F] hover:text-[#F4F5E7] hover:bg-[#111318] transition-colors cursor-pointer border border-[#1C202A]"
-                aria-label="Close details"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              {/* Text on Image bottom */}
-              <div className="absolute bottom-4 left-5 right-5 text-[#F4F5E7]">
-                <div className="flex flex-wrap gap-1.5 mb-2">
-                  {selectedProj.tech.map((t) => (
-                    <span
-                      key={t}
-                      className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-[#050606]/85 backdrop-blur-md font-semibold text-[#D6B96A] border border-[#372D1D]"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <h3 className="font-display font-black text-2xl sm:text-3xl leading-tight">
-                  {selectedProj.title}
-                </h3>
-              </div>
-            </div>
-
-            {/* Modal Content */}
-            <div className="p-6 sm:p-8">
-              <p className="text-[#85898F] leading-relaxed text-sm sm:text-base mb-6">
-                {selectedProj.description}
-              </p>
-
-              <div className="flex items-center justify-between pt-4 border-t border-[#1C202A]">
-                <a
-                  href={selectedProj.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2.5 rounded-xl bg-[#D6B96A] text-[#050606] text-xs font-bold hover:bg-[#F4F5E7] transition-all flex items-center gap-2 shadow-md group/btn"
-                >
-                  <GithubIcon />
-                  <span>Lihat di GitHub</span>
-                  <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5" />
-                </a>
-
-                <button
-                  onClick={() => setSelectedProj(null)}
-                  className="px-4 py-2 rounded-full bg-[#111318] text-[#85898F] font-sans text-xs font-semibold hover:text-[#F4F5E7] border border-[#1C202A] transition-colors cursor-pointer"
-                >
-                  Tutup
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }
 
-// ── PURE PHOTO CARD: NATURAL DIMENSIONS + ENTRANCE + HOVER LIFT ──
+// ── PURE PHOTO CARD: NATURAL DIMENSIONS + ENTRANCE + HOVER LIFT (DIRECT GITHUB LINK) ──
 function ProjectPhotoCard({
   item,
   index,
-  onClick,
 }: {
   item: (typeof projectsWithDimensions)[0];
   index: number;
-  onClick: () => void;
 }) {
   return (
-    <motion.article
+    <motion.a
+      href={item.github}
+      target="_blank"
+      rel="noopener noreferrer"
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
@@ -296,9 +215,8 @@ function ProjectPhotoCard({
         scale: 1.02,
         transition: { type: "spring", stiffness: 350, damping: 25 },
       }}
-      onClick={onClick}
       style={{ aspectRatio: `${item.width} / ${item.height}` }}
-      className="group relative w-full rounded-[20px] sm:rounded-[22px] overflow-hidden cursor-pointer border border-[#1C202A] shadow-[0_6px_22px_rgba(5,6,6,0.7)] hover:shadow-[0_16px_36px_rgba(5,6,6,0.95)] hover:border-[#D6B96A]/60 transition-colors duration-300 bg-[#111318]"
+      className="group relative block w-full rounded-[20px] sm:rounded-[22px] overflow-hidden cursor-pointer border border-[#1C202A] shadow-[0_6px_22px_rgba(5,6,6,0.7)] hover:shadow-[0_16px_36px_rgba(5,6,6,0.95)] hover:border-[#D6B96A]/60 transition-colors duration-300 bg-[#111318]"
     >
       {/* Edge-to-edge Image with Natural Dimensions */}
       <Image
@@ -319,19 +237,15 @@ function ProjectPhotoCard({
           {item.title}
         </h3>
 
-        {/* Small GitHub Button */}
-        <a
-          href={item.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
-          className="shrink-0 p-1.5 sm:p-2 rounded-full bg-[#050606]/75 hover:bg-[#1C202A] backdrop-blur-md border border-[#1C202A] hover:border-[#D6B96A] text-[#85898F] hover:text-[#F4F5E7] transition-all flex items-center justify-center shadow-md group/btn"
+        {/* Small GitHub Button indicator */}
+        <span
+          className="shrink-0 p-1.5 sm:p-2 rounded-full bg-[#050606]/75 group-hover:bg-[#1C202A] backdrop-blur-md border border-[#1C202A] group-hover:border-[#D6B96A] text-[#85898F] group-hover:text-[#F4F5E7] transition-all flex items-center justify-center shadow-md"
           title={`Buka ${item.title} di GitHub`}
           aria-label={`Buka ${item.title} di GitHub`}
         >
           <GithubIcon />
-        </a>
+        </span>
       </div>
-    </motion.article>
+    </motion.a>
   );
 }

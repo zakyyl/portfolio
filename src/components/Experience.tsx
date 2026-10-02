@@ -121,14 +121,14 @@ export default function Experience() {
         <div className="inline-flex items-center gap-2 mb-2">
           <span className="w-2 h-2 rounded-full bg-[#D6B96A] shadow-[0_0_8px_rgba(214,185,106,0.6)]" />
           <span className="text-xs font-mono font-bold tracking-widest text-[#D6B96A] uppercase">
-            CAREER &amp; ACADEMIC JOURNEY
+            CAREER &amp; ACADEMIC
           </span>
         </div>
 
         <h2
           className={`text-4xl sm:text-5xl md:text-6xl font-black text-[#F4F5E7] tracking-tight uppercase leading-[0.95] mb-2 sm:mb-3 ${anton.className}`}
         >
-          MY <span className="text-[#A49872]">EXPERIENCE</span>
+          MY <span className="text-[#A49872]">JOURNEY</span>
         </h2>
 
         <p className="text-[#85898F] text-xs sm:text-sm max-w-md mx-auto leading-relaxed px-2">
