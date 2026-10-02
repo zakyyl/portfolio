@@ -2,26 +2,52 @@
 @config "../../tailwind.config.js";
 
 @theme {
-  --color-primary: #000000;
-  --color-secondary: #171717;
-  --color-accent: #2d2011;
-  --color-textlight: #51463b;
-  --color-text: #61574d;
+  --color-primary: #050606;
+  --color-secondary: #111318;
+  --color-surface: #111318;
+  --color-surface-2: #1C202A;
+  --color-accent: #D6B96A;
+  --color-gold: #A49872;
+  --color-cool-glow: #222939;
+  --color-bronze: #372D1D;
+  --color-taupe: #554933;
+  --color-champagne: #CDCBA7;
+  --color-warmwhite: #F4F5E7;
+  --color-muted: #85898F;
+  --color-text: #A49872;
 }
 
 :root {
-  --color-primary: #000000;
-  --color-secondary: #171717;
-  --color-accent: #2d2011;
-  --color-text: #61574d;
+  --color-primary: #050606;
+  --color-secondary: #111318;
+  --color-surface: #111318;
+  --color-surface-2: #1C202A;
+  --color-accent: #D6B96A;
+  --color-gold: #A49872;
+  --color-cool-glow: #222939;
+  --color-bronze: #372D1D;
+  --color-taupe: #554933;
+  --color-champagne: #CDCBA7;
+  --color-warmwhite: #F4F5E7;
+  --color-muted: #85898F;
+  --color-text: #A49872;
 }
 
 /* Dark mode */
 [data-theme="dark"] {
-  --color-primary: #000000;
-  --color-secondary: #171717;
-  --color-accent: #2d2011;
-  --color-text: #61574d;
+  --color-primary: #050606;
+  --color-secondary: #111318;
+  --color-surface: #111318;
+  --color-surface-2: #1C202A;
+  --color-accent: #D6B96A;
+  --color-gold: #A49872;
+  --color-cool-glow: #222939;
+  --color-bronze: #372D1D;
+  --color-taupe: #554933;
+  --color-champagne: #CDCBA7;
+  --color-warmwhite: #F4F5E7;
+  --color-muted: #85898F;
+  --color-text: #A49872;
 }
 
 * {
@@ -33,5 +59,59 @@ body {
   overflow-x: hidden;
   max-width: 100%;
   scroll-behavior: smooth;
+  background-color: #050606;
+  color: #F4F5E7;
 }
+
+::selection {
+  background-color: #D6B96A;
+  color: #050606;
+}
+
+/* ─── Ultra-Smooth Hardware-Accelerated Marquee Animations ─── */
+@keyframes marquee-scroll-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes marquee-scroll-right {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-marquee-left {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll-left 45s linear infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.animate-marquee-right {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll-right 45s linear infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.animate-marquee-left:hover,
+.animate-marquee-right:hover,
+.group:hover .animate-marquee-left,
+.group:hover .animate-marquee-right {
+  animation-play-state: paused;
+}
+
 
