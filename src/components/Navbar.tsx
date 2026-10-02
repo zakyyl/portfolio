@@ -154,7 +154,7 @@ export default function Navbar() {
                   key={item.href}
                   href={item.href}
                   onClick={(e) => handleClick(e, item.href)}
-                  className={`relative py-1 transition-colors duration-200 cursor-pointer flex flex-col items-center
+                  className={`relative py-1 transition-colors duration-200 cursor-pointer
                     ${
                       isActive
                         ? "text-white font-semibold"
@@ -163,11 +163,6 @@ export default function Navbar() {
                   `}
                 >
                   <span>{item.label}</span>
-
-                  {/* Active Indicator Dot (Centered right below the word) */}
-                  {isActive && (
-                    <span className="absolute -bottom-1 w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-[#D6B96A] shadow-[0_0_8px_#D6B96A]" />
-                  )}
                 </a>
               );
             })}
