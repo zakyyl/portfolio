@@ -1,218 +1,246 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import { Anton } from "next/font/google";
 import { experiences } from "@/src/data/experience";
-import { ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { ChevronLeft, ChevronRight, CheckCircle2, Building2 } from "lucide-react";
+
+const anton = Anton({
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
 
 export default function Experience() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(1024);
 
-  const currentExp = experiences[activeIndex];
   const total = experiences.length;
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const getIndex = (offset: number) =>
+    (activeIndex + offset + total) % total;
+
+  const navigate = (dir: number) => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setActiveIndex((prev) => (prev + dir + total) % total);
+    setTimeout(() => setIsAnimating(false), 380);
+  };
+
+  // Touch swipe support for mobile
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const minSwipeDistance = 45;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    if (isLeftSwipe) {
+      navigate(1);
+    } else if (isRightSwipe) {
+      navigate(-1);
+    }
+  };
+
+  // Card Positions for 3D Carousel: left-far, left, center, right, right-far
+  const cardPositions = [-2, -1, 0, 1, 2];
+
+  const getCardStyle = (offset: number): React.CSSProperties => {
+    const isMobile = windowWidth < 768;
+    const absOffset = Math.abs(offset);
+
+    const scale =
+      offset === 0
+        ? 1
+        : absOffset === 1
+        ? isMobile
+          ? 0.82
+          : 0.86
+        : isMobile
+        ? 0.65
+        : 0.72;
+    const baseTranslateX = isMobile ? 120 : 270;
+    const translateX = offset * baseTranslateX;
+    const translateZ = offset === 0 ? 0 : absOffset === 1 ? -90 : -180;
+    const rotateY = offset * (isMobile ? -10 : -8);
+
+    const opacity =
+      absOffset > 2
+        ? 0
+        : absOffset === 2
+        ? isMobile
+          ? 0
+          : 0.45
+        : absOffset === 1
+        ? 0.75
+        : 1;
+    const zIndex = offset === 0 ? 30 : absOffset === 1 ? 20 : 10;
+
+    return {
+      position: "absolute",
+      transform: `translateX(${translateX}px) scale(${scale}) perspective(1200px) rotateY(${rotateY}deg) translateZ(${translateZ}px)`,
+      opacity,
+      zIndex,
+      transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+      transformOrigin: "center center",
+      pointerEvents: offset === 0 ? "auto" : "none",
+    };
+  };
 
   return (
     <section
       id="experience"
-      className="relative max-w-5xl mx-auto px-4 sm:px-6 h-auto min-h-screen lg:h-screen lg:max-h-screen flex flex-col justify-center pt-20 pb-10 lg:pt-16 lg:pb-4 overflow-y-visible lg:overflow-hidden select-none"
+      className="relative min-h-screen md:h-screen md:max-h-screen w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col justify-center py-12 md:py-12 overflow-hidden select-none bg-[#050606]"
     >
-      {/* Ambient Spotlight */}
-      <div className="absolute top-1/3 -right-40 w-[450px] h-[450px] rounded-full bg-[var(--color-accent)] opacity-20 blur-[150px] pointer-events-none" />
+      {/* Ambient Cool Glow Behind Carousel */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[320px] rounded-full bg-[#222939] opacity-40 blur-[150px] pointer-events-none" />
 
-      {/* ─── SECTION HEADER (Compact & Elegant) ─── */}
-      <div className="text-center mb-4 sm:mb-5 md:mb-6 relative z-10 shrink-0">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight mb-1">
-          My <span className="text-[var(--color-text)]">Experience</span>
+      {/* ─── SECTION HEADER ─── */}
+      <div className="text-center mb-5 md:mb-8 relative z-10">
+        <div className="inline-flex items-center gap-2 mb-2">
+          <span className="w-2 h-2 rounded-full bg-[#D6B96A] shadow-[0_0_8px_rgba(214,185,106,0.6)]" />
+          <span className="text-xs font-mono font-bold tracking-widest text-[#D6B96A] uppercase">
+            CAREER &amp; ACADEMIC
+          </span>
+        </div>
+
+        <h2
+          className={`text-4xl sm:text-5xl md:text-6xl font-black text-[#F4F5E7] tracking-tight uppercase leading-[0.95] mb-2 sm:mb-3 ${anton.className}`}
+        >
+          MY <span className="text-[#A49872]">JOURNEY</span>
         </h2>
-        
-        <p className="text-stone-400 text-xs sm:text-xs md:text-sm max-w-md mx-auto leading-relaxed">
-          Perjalanan akademik, kepanitiaan, asisten laboratorium, dan pengalaman kerja profesional di bidang IT.
+
+        <p className="text-[#85898F] text-xs sm:text-sm max-w-md mx-auto leading-relaxed px-2">
+          Perjalanan profesional di RS Bhayangkara, kepanitiaan, asisten laboratorium komputer, dan program intensif IT.
         </p>
       </div>
 
-      {/* ─── TIMELINE + DETAIL CARD (Snug & Centered Cluster) ─── */}
-      <div className="flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-8 relative z-10 w-full">
+      {/* ─── 3D CAROUSEL STAGE FOR EXPERIENCES ─── */}
+      <div
+        className="relative flex items-center justify-center w-full my-auto"
+        style={{ height: windowWidth < 768 ? 410 : 450 }}
+      >
+        {/* Left Arrow Button */}
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute left-1 sm:left-2 md:left-6 z-50 p-2.5 sm:p-3 rounded-full bg-[#111318]/90 backdrop-blur-md border border-[#1C202A] text-[#85898F] hover:text-[#F4F5E7] hover:border-[#A49872]/60 hover:bg-[#1C202A] hover:scale-110 active:scale-95 transition-all shadow-2xl cursor-pointer"
+          aria-label="Previous Experience"
+        >
+          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+        </button>
 
-        {/* ── MOBILE ONLY: Sleek Horizontal Stepper Selector ── */}
-        <div className="lg:hidden w-full overflow-x-auto no-scrollbar py-1 flex items-center gap-2 px-1">
-          {experiences.map((exp, index) => {
-            const isActive = index === activeIndex;
+        {/* 3D Cards Container */}
+        <div
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          className="relative w-full flex items-center justify-center h-full touch-pan-y"
+          style={{ perspective: "1400px" }}
+        >
+          {cardPositions.map((offset) => {
+            const index = getIndex(offset);
+            const exp = experiences[index];
+            const isCenter = offset === 0;
+
             return (
-              <button
-                key={index}
-                onClick={() => setActiveIndex(index)}
-                className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 cursor-pointer ${
-                  isActive
-                    ? "bg-amber-500 text-black font-bold shadow-md shadow-amber-500/20 scale-105"
-                    : "bg-[#1c1611] text-stone-400 border border-[#403427]/70 hover:text-stone-200"
-                }`}
+              <div
+                key={`${index}-${offset}`}
+                style={getCardStyle(offset)}
+                className="w-[270px] sm:w-[310px] md:w-[340px]"
               >
-                <span>{exp.year.split(" - ")[0]}</span> · <span className="opacity-95">{exp.company.length > 20 ? exp.company.substring(0, 20) + "..." : exp.company}</span>
-              </button>
+                <div
+                  className={`
+                    rounded-[1.8rem] overflow-hidden border transition-all duration-300
+                    bg-gradient-to-br from-[#1C202A] via-[#111318] to-[#050606]
+                    ${
+                      isCenter
+                        ? "border-[#A49872]/80 shadow-[0_25px_60px_rgba(5,6,6,0.95)]"
+                        : "border-[#1C202A]/80 shadow-lg opacity-85"
+                    }
+                  `}
+                >
+                  {/* Experience Image Container */}
+                  <div
+                    className="relative overflow-hidden bg-[#050606]"
+                    style={{
+                      height: isCenter
+                        ? windowWidth < 768
+                          ? 160
+                          : 185
+                        : windowWidth < 768
+                        ? 135
+                        : 155,
+                    }}
+                  >
+                    <Image
+                      src={exp.image}
+                      alt={exp.company}
+                      fill
+                      className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                    />
+
+                    {/* Bottom Vignette Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#111318] via-[#050606]/30 to-transparent" />
+
+                    {/* Year Badge on Image */}
+                    <div className="absolute bottom-2.5 right-3 text-[#D6B96A] text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-[#050606]/85 backdrop-blur-sm border border-[#372D1D]">
+                      {exp.year}
+                    </div>
+                  </div>
+
+                  {/* Card Content */}
+                  <div className={`p-4 ${isCenter ? "md:p-4.5" : "md:p-4"}`}>
+                    <h3
+                      className={`font-black tracking-tight text-[#F4F5E7] mb-1 line-clamp-1
+                        ${isCenter ? (windowWidth < 768 ? "text-base" : "text-lg") : "text-sm"}`}
+                    >
+                      {exp.title}
+                    </h3>
+
+                    <div className="flex items-center gap-1.5 text-[#D6B96A] text-xs font-semibold mb-2 truncate">
+                      <Building2 className="w-3.5 h-3.5 shrink-0" />
+                      <span className="truncate">{exp.company}</span>
+                    </div>
+
+                    <p className="text-[#85898F] text-xs leading-relaxed mb-3 line-clamp-3">
+                      {exp.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
             );
           })}
         </div>
 
-        {/* ── DESKTOP ONLY: Compact Clean Borderless Timeline (Snug ~280px) ── */}
-        <div className="hidden lg:flex w-[280px] shrink-0 flex-col justify-center">
-          <div className="flex flex-col gap-0.5">
-            {experiences.map((exp, index) => {
-              const isActive = index === activeIndex;
-              const isPast = index < activeIndex;
-
-              return (
-                <div key={index} className="relative flex items-start">
-                  
-                  {/* Perfectly Centered Connecting Segment Line */}
-                  {index < total - 1 && (
-                    <div
-                      className={`absolute left-[11px] top-5 bottom-0 w-0.5 transition-colors duration-300 z-0 ${
-                        index < activeIndex ? "bg-amber-500/80" : "bg-[#2d2011]"
-                      }`}
-                      style={{ height: "calc(100% - 1px)" }}
-                    />
-                  )}
-
-                  <button
-                    onClick={() => setActiveIndex(index)}
-                    className="flex items-start gap-3 text-left py-1 px-0 relative group w-full cursor-pointer z-10 transition-transform duration-200"
-                  >
-                    {/* Centered Node Circle (Compact 24px) */}
-                    <div
-                      className={`relative flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center border transition-all duration-300 ${
-                        isActive
-                          ? "bg-[#2d2011] border-stone-100 text-stone-100 shadow-[0_0_12px_rgba(232,222,209,0.35)] scale-105"
-                          : isPast
-                          ? "bg-[#1c1611] border-amber-600/70 text-amber-500"
-                          : "bg-[#0a0806] border-[#403427] text-stone-600 group-hover:border-stone-400"
-                      }`}
-                    >
-                      {isActive ? (
-                        <Check className="w-3 h-3 stroke-[2.5]" />
-                      ) : isPast ? (
-                        <Check className="w-2.5 h-2.5 opacity-80" />
-                      ) : (
-                        <div className="w-1.5 h-1.5 rounded-full bg-stone-600 group-hover:bg-stone-300 transition-colors" />
-                      )}
-                    </div>
-
-                    {/* Text Label without box container */}
-                    <div className="min-w-0 flex-1 pt-0">
-                      <p
-                        className={`text-[9px] sm:text-[10px] font-mono font-bold tracking-wider uppercase leading-tight mb-0.5 transition-colors ${
-                          isActive ? "text-amber-400" : "text-stone-500 group-hover:text-stone-400"
-                        }`}
-                      >
-                        {exp.year}
-                      </p>
-                      <p
-                        className={`text-xs sm:text-[13px] font-semibold truncate leading-tight transition-colors ${
-                          isActive ? "text-white" : "text-stone-400 group-hover:text-stone-200"
-                        }`}
-                      >
-                        {exp.company}
-                      </p>
-                    </div>
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* ── RIGHT: Active Detailed Card (Snug ~540px) ── */}
-        <div className="w-full lg:w-[540px] shrink-0">
-          <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-[#403427] bg-gradient-to-br from-[#1c1611] via-[#14100c] to-[#0a0806] shadow-[0_20px_50px_rgba(0,0,0,0.9)] transition-all duration-500">
-            
-            {/* Featured Experience Image */}
-            <div className="relative h-36 sm:h-40 md:h-44 w-full overflow-hidden bg-black/80 flex items-center justify-center group/img">
-              {/* Blurred Ambient Image Background */}
-              <Image
-                src={currentExp.image}
-                alt=""
-                fill
-                className="object-cover blur-md scale-110 opacity-60 brightness-90 transition-all duration-700"
-              />
-
-              <div className="absolute inset-0 bg-black/40 pointer-events-none" />
-
-              {/* Main Crisp Center Image */}
-              <div className="relative w-full h-full flex items-center justify-center z-10 p-3 drop-shadow-2xl">
-                <Image
-                  src={currentExp.image}
-                  alt={currentExp.company}
-                  fill
-                  className="object-contain transition-transform duration-700 group-hover/img:scale-105"
-                />
-              </div>
-
-              {/* Bottom Vignette Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#14100c] via-black/20 to-transparent pointer-events-none z-10" />
-
-              {/* Header Title on Image */}
-              <div className="absolute bottom-3 left-4 right-4 pointer-events-none z-20">
-                <h3 className="text-white text-base sm:text-lg md:text-xl font-black leading-tight drop-shadow-md">
-                  {currentExp.title}
-                </h3>
-              </div>
-            </div>
-
-            {/* Experience Body Content */}
-            <div className="p-4 sm:p-5">
-              <div className="flex items-center gap-3 mb-2.5 pb-2.5 border-b border-white/5">
-                <div className="w-1 h-7 rounded-full bg-gradient-to-b from-amber-500 to-[#e8ded1]" />
-                <div>
-                  <h4 className="text-white font-bold text-sm sm:text-base leading-tight">
-                    {currentExp.company}
-                  </h4>
-                  <p className="text-stone-400 text-[11px] sm:text-xs mt-0.5">
-                    Verified Experience · {currentExp.year}
-                  </p>
-                </div>
-              </div>
-
-              <p className="text-stone-300/90 leading-relaxed text-xs sm:text-[13px] mb-3 line-clamp-3">
-                {currentExp.description}
-              </p>
-
-              {/* Navigation & Controls */}
-              <div className="flex items-center justify-between pt-2.5 border-t border-white/5">
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() =>
-                      setActiveIndex((p) => (p === 0 ? total - 1 : p - 1))
-                    }
-                    className="p-2 rounded-full bg-[#14100c] border border-[#403427] text-stone-300 hover:text-white hover:border-stone-400 hover:bg-[#2d2011] hover:scale-105 active:scale-95 transition-all shadow-md"
-                    title="Previous Experience"
-                    aria-label="Previous Experience"
-                  >
-                    <ChevronLeft className="w-3.5 h-3.5" />
-                  </button>
-
-                  <button
-                    onClick={() =>
-                      setActiveIndex((p) => (p === total - 1 ? 0 : p + 1))
-                    }
-                    className="p-2 rounded-full bg-[#14100c] border border-[#403427] text-stone-300 hover:text-white hover:border-stone-400 hover:bg-[#2d2011] hover:scale-105 active:scale-95 transition-all shadow-md"
-                    title="Next Experience"
-                    aria-label="Next Experience"
-                  >
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-
-                <div className="text-right">
-                  <span className="text-[11px] font-mono text-stone-400">
-                    <strong className="text-stone-200">{activeIndex + 1}</strong> / {total} Experiences
-                  </span>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-
+        {/* Right Arrow Button */}
+        <button
+          onClick={() => navigate(1)}
+          className="absolute right-1 sm:right-2 md:right-6 z-50 p-2.5 sm:p-3 rounded-full bg-[#111318]/90 backdrop-blur-md border border-[#1C202A] text-[#85898F] hover:text-[#F4F5E7] hover:border-[#A49872]/60 hover:bg-[#1C202A] hover:scale-110 active:scale-95 transition-all shadow-2xl cursor-pointer"
+          aria-label="Next Experience"
+        >
+          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+        </button>
       </div>
     </section>
   );

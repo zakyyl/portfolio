@@ -1,9 +1,16 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { Anton } from "next/font/google";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { projects } from "@/src/data/projects";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+
+const anton = Anton({
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
 
 const GithubIcon = () => (
   <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current">
@@ -11,234 +18,234 @@ const GithubIcon = () => (
   </svg>
 );
 
-export default function Projects() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(1024);
+// Map each project to its exact actual image resolution (width & height)
+const projectsWithDimensions = [
+  { ...projects[0], width: 653, height: 397 },    // Keluh Prov (653x397)
+  { ...projects[1], width: 652, height: 817 },    // Komi Dentist (652x817)
+  { ...projects[2], width: 820, height: 817 },    // Flutter UI Clothes Store (820x817)
+  { ...projects[3], width: 1080, height: 1080 },  // Flutter UI E-Commerce (1080x1080)
+  { ...projects[4], width: 1600, height: 744 },   // Landing Page Clothes Store (1600x744)
+  { ...projects[5], width: 1600, height: 730 },   // Portal PMB Acai (1600x730)
+  { ...projects[6], width: 1080, height: 1080 },  // Pawfect Shelter (1080x1080)
+  { ...projects[7], width: 828, height: 816 },    // Home Cleaning (828x816)
+  { ...projects[8], width: 828, height: 1032 },   // Indeks Kepuasaan Pasien (828x1032)
+  { ...projects[9], width: 1200, height: 1200 },  // Clinical Pathway (1200x1200)
+  { ...projects[10], width: 1200, height: 1200 }, // GymOS (1200x1200)
+  { ...projects[11], width: 1856, height: 2304 }, // Suhu App (1856x2304)
+];
 
-  const total = projects.length;
+// Distribute projects naturally across 3 columns using their real aspect ratios
+const column1 = [
+  projectsWithDimensions[9],  // Clinical Pathway (1200x1200)
+  projectsWithDimensions[1],  // Komi Dentist (652x817)
+  projectsWithDimensions[6],  // Pawfect Shelter (1080x1080)
+  projectsWithDimensions[4],  // Landing Page Clothes Store (1600x744)
+];
+
+const column2 = [
+  projectsWithDimensions[10], // GymOS (1200x1200)
+  projectsWithDimensions[0],  // Keluh Prov (653x397)
+  projectsWithDimensions[7],  // Home Cleaning (828x816)
+  projectsWithDimensions[3],  // Flutter UI E-Commerce (1080x1080)
+];
+
+const column3 = [
+  projectsWithDimensions[11], // Suhu App (1856x2304)
+  projectsWithDimensions[8],  // Indeks Kepuasaan Pasien (828x1032)
+  projectsWithDimensions[5],  // Portal PMB Acai (1600x730)
+  projectsWithDimensions[2],  // Flutter UI Clothes Store (820x817)
+];
+
+export default function Projects() {
+  const [isDesktop, setIsDesktop] = useState(false);
+  const containerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    checkDesktop();
+    window.addEventListener("resize", checkDesktop);
+    return () => window.removeEventListener("resize", checkDesktop);
   }, []);
 
-  const getIndex = (offset: number) =>
-    (activeIndex + offset + total) % total;
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
 
-  const navigate = (dir: number) => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setActiveIndex((prev) => (prev + dir + total) % total);
-    setTimeout(() => setIsAnimating(false), 380);
-  };
+  // Inertial spring smoothing for butter-smooth Framer parallax feel
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 26,
+    restDelta: 0.001,
+  });
 
-  // Touch swipe support for mobile
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
-
-  const minSwipeDistance = 45;
-
-  const onTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
-    if (isLeftSwipe) {
-      navigate(1);
-    } else if (isRightSwipe) {
-      navigate(-1);
-    }
-  };
-
-  // Posisi kartu: left-far, left, center, right, right-far
-  const cardPositions = [-2, -1, 0, 1, 2];
-
-  const getCardStyle = (offset: number): React.CSSProperties => {
-    const isMobile = windowWidth < 768;
-    const absOffset = Math.abs(offset);
-    
-    const scale = offset === 0 ? 1 : absOffset === 1 ? (isMobile ? 0.82 : 0.85) : (isMobile ? 0.65 : 0.72);
-    const baseTranslateX = isMobile ? 120 : 260;
-    const translateX = offset * baseTranslateX;
-    const translateZ = offset === 0 ? 0 : absOffset === 1 ? -90 : -180;
-    const rotateY = offset * (isMobile ? -10 : -8);
-    
-    const opacity = absOffset > 2 ? 0 : absOffset === 2 ? (isMobile ? 0 : 0.45) : absOffset === 1 ? 0.75 : 1;
-    const zIndex = offset === 0 ? 30 : absOffset === 1 ? 20 : 10;
-
-    return {
-      position: "absolute",
-      transform: `translateX(${translateX}px) scale(${scale}) perspective(1200px) rotateY(${rotateY}deg) translateZ(${translateZ}px)`,
-      opacity,
-      zIndex,
-      transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
-      transformOrigin: "center center",
-      pointerEvents: offset === 0 ? "auto" : "none",
-    };
-  };
+  // Staggered column parallax transforms (active on desktop 3-column view)
+  // Column 1: moves at base rate
+  const y1 = useTransform(smoothProgress, [0, 1], [0, -80]);
+  // Column 2: starts staggered lower at +60px (matching hiartem.com offset) and glides faster to -190px
+  const y2 = useTransform(smoothProgress, [0, 1], [60, -190]);
+  // Column 3: starts at -20px and drifts upward to -110px
+  const y3 = useTransform(smoothProgress, [0, 1], [-20, -110]);
 
   return (
     <section
       id="projects"
-      className="relative min-h-screen md:h-screen md:max-h-screen w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col justify-center py-12 md:py-12 overflow-hidden select-none"
+      ref={containerRef}
+      className="relative w-full bg-[#050606] text-[#F4F5E7] pt-20 sm:pt-28 md:pt-32 pb-28 sm:pb-36 md:pb-44 px-4 sm:px-6 md:px-8 overflow-hidden select-none"
     >
-      {/* Ambient Spotlight Behind Carousel */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[320px] rounded-full bg-[var(--color-accent)] opacity-25 blur-[140px] pointer-events-none" />
+      {/* ── SECTION AMBIENT COOL GLOW ── */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[320px] rounded-full bg-[#222939] opacity-35 blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-10 left-10 w-[400px] h-[400px] rounded-full bg-[#161D2A] opacity-30 blur-[130px] pointer-events-none" />
 
-      {/* ─── SECTION HEADER (Compact In-Frame) ─── */}
-      <div className="text-center mb-5 md:mb-8 relative z-10">
-        <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-1.5">
-          Featured <span className="text-[var(--color-text)]">Projects</span>
-        </h2>
-        
-        <p className="text-stone-400 text-xs sm:text-sm max-w-md mx-auto leading-relaxed px-2">
-          Koleksi sistem web, mobile apps, dan aplikasi digital yang telah saya kembangkan.
-        </p>
-      </div>
-
-      {/* ─── 3D CAROUSEL STAGE ─── */}
+      {/* Subtle Tech Grid Texture */}
       <div
-        className="relative flex items-center justify-center w-full my-auto"
-        style={{ height: windowWidth < 768 ? 390 : 430 }}
-      >
-        {/* Left Arrow Button */}
-        <button
-          onClick={() => navigate(-1)}
-          className="absolute left-1 sm:left-2 md:left-6 z-50 p-2.5 sm:p-3 rounded-full bg-[#1c1611]/80 backdrop-blur-md border border-[#403427] text-stone-300 hover:text-white hover:border-stone-400 hover:bg-[#2d2011] hover:scale-110 active:scale-95 transition-all shadow-2xl cursor-pointer"
-          aria-label="Previous Project"
+        className="absolute inset-0 pointer-events-none opacity-[0.015]"
+        style={{
+          backgroundImage: `linear-gradient(#F4F5E7 1px, transparent 1px), linear-gradient(90deg, #F4F5E7 1px, transparent 1px)`,
+          backgroundSize: "60px 60px",
+        }}
+      />
+
+      {/* ── EXACT MAX-WIDTH (900px) MATCHING SCREENSHOT WITH SIDE MARGINS ── */}
+      <div className="max-w-[900px] mx-auto relative z-10">
+        
+        {/* ── SECTION HEADER ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-10 sm:mb-14"
         >
-          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-        </button>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="w-2 h-2 rounded-full bg-[#D6B96A] shadow-[0_0_8px_rgba(214,185,106,0.6)]" />
+            <span className="text-xs font-mono font-bold tracking-widest text-[#D6B96A] uppercase">
+              PORTFOLIO &amp; ARTIFACTS
+            </span>
+          </div>
 
-        {/* 3D Cards Container */}
-        <div
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-          className="relative w-full flex items-center justify-center h-full touch-pan-y"
-          style={{ perspective: "1400px" }}
-        >
-          {cardPositions.map((offset) => {
-            const index = getIndex(offset);
-            const proj = projects[index];
-            const isCenter = offset === 0;
+          <h2
+            className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#F4F5E7] tracking-tight uppercase leading-[0.95] mb-4 ${anton.className}`}
+          >
+            WHAT MY PROJECTS <span className="block text-[#A49872]">LOOK LIKE</span>
+          </h2>
 
-            return (
-              <div
-                key={`${index}-${offset}`}
-                style={getCardStyle(offset)}
-                className="w-[260px] sm:w-[290px] md:w-[325px]"
-              >
-                <div
-                  className={`
-                    rounded-[1.8rem] overflow-hidden border transition-all duration-300
-                    bg-gradient-to-br from-[#1c1611] via-[#14100c] to-[#0a0806]
-                    ${
-                      isCenter
-                        ? "border-[#51463b] shadow-[0_25px_60px_rgba(0,0,0,0.9)]"
-                        : "border-[#403427]/60 shadow-lg opacity-90"
-                    }
-                  `}
-                >
-                  {/* Project Image Container */}
-                  <div
-                    className="relative overflow-hidden bg-black/60"
-                    style={{ height: isCenter ? (windowWidth < 768 ? 150 : 175) : (windowWidth < 768 ? 130 : 145) }}
-                  >
-                    <Image
-                      src={proj.image}
-                      alt={proj.title}
-                      fill
-                      className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                    />
-                    
-                    {/* Bottom Vignette Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#14100c] via-transparent to-black/30" />
+          <p className="mt-4 text-sm sm:text-base text-[#85898F] max-w-lg leading-relaxed font-normal">
+            Koleksi sistem web, mobile apps, dan aplikasi digital yang telah saya kembangkan.
+          </p>
+        </motion.div>
 
-                    {/* Slide Counter */}
-                    <div className="absolute bottom-2.5 left-3 text-stone-300 text-[10px] font-mono font-bold tracking-wider px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-sm border border-white/5">
-                      {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
-                    </div>
-                  </div>
+        {/* ── 3-COLUMN MASONRY PHOTO GRID WITH STAGGERED PARALLAX SCROLL ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
+          
+          {/* COLUMN 1 */}
+          <motion.div
+            style={isDesktop ? { y: y1 } : undefined}
+            className="flex flex-col gap-5 will-change-transform"
+          >
+            {column1.map((item, idx) => (
+              <ProjectPhotoCard
+                key={item.title}
+                item={item}
+                index={idx}
+              />
+            ))}
+          </motion.div>
 
-                  {/* Card Content */}
-                  <div className={`p-4 ${isCenter ? "md:p-4.5" : "md:p-4"}`}>
-                    <h3
-                      className={`font-black tracking-tight text-white mb-1 line-clamp-1
-                        ${isCenter ? (windowWidth < 768 ? "text-base" : "text-lg") : "text-sm"}`}
-                    >
-                      {proj.title}
-                    </h3>
-                    
-                    <p className="text-stone-300/80 text-xs leading-relaxed mb-3 line-clamp-2">
-                      {proj.description}
-                    </p>
+          {/* COLUMN 2 (CENTER - STAGGERED OFFSET + FASTER PARALLAX) */}
+          <motion.div
+            style={isDesktop ? { y: y2 } : undefined}
+            className="flex flex-col gap-5 will-change-transform"
+          >
+            {column2.map((item, idx) => (
+              <ProjectPhotoCard
+                key={item.title}
+                item={item}
+                index={idx}
+              />
+            ))}
+          </motion.div>
 
-                    {/* Tech Stack Pills */}
-                    <div className="flex flex-wrap gap-1.5 mb-3.5">
-                      {proj.tech
-                        .slice(0, isCenter ? proj.tech.length : 2)
-                        .map((tech) => (
-                          <span
-                            key={tech}
-                            className="text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded-md
-                                       bg-[#2d2011]/90 text-stone-300
-                                       border border-[#403427]"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      {!isCenter && proj.tech.length > 2 && (
-                        <span className="text-[9px] sm:text-[10px] px-2 py-0.5 rounded-md bg-stone-900 text-stone-400 border border-stone-800">
-                          +{proj.tech.length - 2}
-                        </span>
-                      )}
-                    </div>
+          {/* COLUMN 3 */}
+          <motion.div
+            style={isDesktop ? { y: y3 } : undefined}
+            className="flex flex-col gap-5 will-change-transform"
+          >
+            {column3.map((item, idx) => (
+              <ProjectPhotoCard
+                key={item.title}
+                item={item}
+                index={idx}
+              />
+            ))}
+          </motion.div>
 
-                    {/* Action Link (Only on center card) */}
-                    {isCenter && (
-                      <div className="pt-2 border-t border-white/5 flex items-center justify-between">
-                        <a
-                          href={proj.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-3.5 py-1.5 rounded-xl bg-stone-100 text-black text-xs font-bold hover:bg-white transition-all flex items-center gap-1.5 shadow-md group/btn"
-                        >
-                          <GithubIcon />
-                          <span>View on GitHub</span>
-                          <span className="transition-transform group-hover/btn:translate-x-0.5">→</span>
-                        </a>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
         </div>
 
-        {/* Right Arrow Button */}
-        <button
-          onClick={() => navigate(1)}
-          className="absolute right-2 md:right-6 z-50 p-3 rounded-full bg-[#1c1611]/80 backdrop-blur-md border border-[#403427] text-stone-300 hover:text-white hover:border-stone-400 hover:bg-[#2d2011] hover:scale-110 active:scale-95 transition-all shadow-2xl"
-          aria-label="Next Project"
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
       </div>
-
     </section>
+  );
+}
+
+// ── PURE PHOTO CARD: NATURAL DIMENSIONS + ENTRANCE + HOVER LIFT (DIRECT GITHUB LINK) ──
+function ProjectPhotoCard({
+  item,
+  index,
+}: {
+  item: (typeof projectsWithDimensions)[0];
+  index: number;
+}) {
+  return (
+    <motion.a
+      href={item.github}
+      target="_blank"
+      rel="noopener noreferrer"
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{
+        duration: 0.6,
+        ease: [0.22, 1, 0.36, 1],
+        delay: Math.min(index * 0.06, 0.24),
+      }}
+      whileHover={{
+        y: -6,
+        scale: 1.02,
+        transition: { type: "spring", stiffness: 350, damping: 25 },
+      }}
+      style={{ aspectRatio: `${item.width} / ${item.height}` }}
+      className="group relative block w-full rounded-[20px] sm:rounded-[22px] overflow-hidden cursor-pointer border border-[#1C202A] shadow-[0_6px_22px_rgba(5,6,6,0.7)] hover:shadow-[0_16px_36px_rgba(5,6,6,0.95)] hover:border-[#D6B96A]/60 transition-colors duration-300 bg-[#111318]"
+    >
+      {/* Edge-to-edge Image with Natural Dimensions */}
+      <Image
+        src={item.image}
+        alt={item.title}
+        width={item.width}
+        height={item.height}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
+        className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+      />
+
+      {/* Subtle Bottom Vignette Gradient Directly on Image */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#050606]/95 via-[#050606]/35 to-transparent pointer-events-none" />
+
+      {/* Title & Small GitHub Button directly on image */}
+      <div className="absolute bottom-0 inset-x-0 p-3.5 sm:p-4 flex items-center justify-between gap-2 z-10">
+        <h3 className="font-display font-bold text-xs sm:text-[13px] text-[#F4F5E7] drop-shadow-[0_2px_4px_rgba(5,6,6,0.95)] truncate group-hover:text-[#D6B96A] transition-colors">
+          {item.title}
+        </h3>
+
+        {/* Small GitHub Button indicator */}
+        <span
+          className="shrink-0 p-1.5 sm:p-2 rounded-full bg-[#050606]/75 group-hover:bg-[#1C202A] backdrop-blur-md border border-[#1C202A] group-hover:border-[#D6B96A] text-[#85898F] group-hover:text-[#F4F5E7] transition-all flex items-center justify-center shadow-md"
+          title={`Buka ${item.title} di GitHub`}
+          aria-label={`Buka ${item.title} di GitHub`}
+        >
+          <GithubIcon />
+        </span>
+      </div>
+    </motion.a>
   );
 }

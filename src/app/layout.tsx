@@ -16,11 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-  data-theme="light"
-  className="bg-[var(--color-primary)] text-[var(--color-text)] antialiased transition-colors duration-300"
->
-  {children}
-</body>
+        className="bg-[#050606] text-[#F4F5E7] antialiased transition-colors duration-300"
+      >
+        {children}
+      </body>
 
     </html>
   );
