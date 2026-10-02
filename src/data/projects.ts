@@ -92,4 +92,12 @@ export const projects = [
     github: "https://github.com/zakyyl/gym",
     image: "/images/projects/gym.png", 
   },
+  {
+    title: "Suhu App",
+    description:
+      "Aplikasi Layanan AC Profesional & Sistem Reservasi Terpadu.",
+    tech: ["Flutter", "Laravel"],
+    github: "https://github.com/Suhu-App",
+    image: "/images/projects/suhu.jfif",
+  },
 ];
