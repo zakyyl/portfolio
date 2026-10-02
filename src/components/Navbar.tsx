@@ -1,22 +1,72 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
-const navItems = [
+interface NavItem {
+  label: string;
+  href: string;
+}
+
+const navItems: NavItem[] = [
+  { label: "About", href: "#about" },
   { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
   { label: "Skills", href: "#skills" },
-  { label: "Contact", href: "#contact" },
 ];
+
+// ─── SOCIAL ICONS: GITHUB, LINKEDIN, EMAIL ───
+const GitHubIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current"
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+    />
+  </svg>
+);
+
+const LinkedInIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-none stroke-current"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+    <rect x="2" y="9" width="4" height="12" />
+    <circle cx="4" cy="4" r="2" />
+  </svg>
+);
+
+const EmailIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-none stroke-current"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <rect width="20" height="16" x="2" y="4" rx="2" />
+    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+  </svg>
+);
 
 export default function Navbar() {
   const [active, setActive] = useState("");
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      const scrollPosition = window.scrollY;
+
+      if (scrollPosition < 80) {
+        setActive("");
+        return;
+      }
 
       let current = "";
       navItems.forEach((item) => {
@@ -24,155 +74,140 @@ export default function Navbar() {
         if (!section) return;
 
         const rect = section.getBoundingClientRect();
-        if (rect.top <= 150) {
+        if (rect.top <= 180 && rect.bottom >= 120) {
           current = item.href;
         }
       });
-      
-      if (window.scrollY < 50) current = "";
-      setActive(current);
+
+      if (current) {
+        setActive(current);
+      }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Tutup menu saat resize ke desktop
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) setMenuOpen(false);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    setMenuOpen(false);
+    if (href === "#hero") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setActive("");
+      return;
+    }
+
     const element = document.querySelector(href);
     if (element) {
       const offsetTop = element.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = offsetTop - 80;
+      const offsetPosition = offsetTop - 60;
 
       window.scrollTo({
         top: offsetPosition,
         behavior: "smooth",
       });
+      setActive(href);
     }
   };
 
   return (
-    <>
+    <header className="fixed top-3.5 sm:top-5 left-0 right-0 z-50 flex justify-center pointer-events-none px-3 sm:px-6">
+      {/* ─── MAC DOCK PILL NAVBAR ─── */}
       <nav
-        className={`fixed top-0 w-full z-50 transition-all duration-300
-          ${
-            scrolled || menuOpen
-              ? "bg-[var(--color-primary)]/95 backdrop-blur-md border-b border-[var(--color-text)]/10"
-              : "bg-transparent"
-          }
-        `}
+        className="pointer-events-auto relative w-full max-w-4xl flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl bg-[#0e1117]/85 backdrop-blur-xl border border-white/10 shadow-[0_15px_35px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.15)] select-none transition-all duration-300"
+        aria-label="Main Navigation Dock"
       >
-        <div className="max-w-6xl mx-auto px-5 py-3.5 sm:py-4 flex justify-between md:justify-center items-center relative">
-          {/* Mobile Left Brand Mark */}
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              setMenuOpen(false);
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            className="md:hidden font-extrabold text-sm tracking-widest text-[#e8ded1] uppercase"
-          >
-            ZR<span className="text-amber-500">.</span>
-          </a>
-          
-          {/* Desktop Nav Links */}
-          <div className="hidden md:flex gap-10 text-sm">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={(e) => handleClick(e, item.href)}
-                className={`relative transition-colors duration-300 font-medium
-                  ${
-                    active === item.href
-                      ? "text-[var(--color-secondary)]"
-                      : "text-[var(--color-text)]/70 hover:text-[var(--color-secondary)]"
-                  }
-                `}
-              >
-                {item.label}
-                <span
-                  className={`absolute -bottom-1 left-0 h-0.5 bg-[var(--color-secondary)] transition-all duration-300 ${
-                    active === item.href ? "w-full" : "w-0"
-                  }`}
-                />
-              </a>
-            ))}
-          </div>
+        {/* Subtle Glass Rim Highlight on Top */}
+        <div className="absolute inset-x-4 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
 
-          {/* Hamburger Button (Mobile) */}
-          <button
-            onClick={() => setMenuOpen((prev) => !prev)}
-            className="md:hidden relative z-10 w-8 h-8 flex flex-col justify-center items-center gap-1.5 focus:outline-none cursor-pointer"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
+        {/* ─── LEFT: FAVICON LOGO + DIVIDER + NAV LINKS ─── */}
+        <div className="flex items-center">
+          {/* Favicon Logo Button */}
+          <a
+            href="#hero"
+            onClick={(e) => handleClick(e, "#hero")}
+            className="group relative flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#161D2A] border border-white/15 hover:border-[#D6B96A]/60 shadow-inner transition-transform duration-200 hover:scale-105 cursor-pointer flex-shrink-0 overflow-hidden p-1.5"
+            title="Scroll to Top"
+            aria-label="Scroll to Top"
           >
-            <span
-              className={`block w-6 h-0.5 bg-[#e8ded1] transition-all duration-300 origin-center ${
-                menuOpen ? "rotate-45 translate-y-2" : ""
-              }`}
-            />
-            <span
-              className={`block w-6 h-0.5 bg-[#e8ded1] transition-all duration-300 ${
-                menuOpen ? "opacity-0 scale-x-0" : ""
-              }`}
-            />
-            <span
-              className={`block w-6 h-0.5 bg-[#e8ded1] transition-all duration-300 origin-center ${
-                menuOpen ? "-rotate-45 -translate-y-2" : ""
-              }`}
-            />
-          </button>
+            <div className="relative w-full h-full">
+              <Image
+                src="/images/favico.png"
+                alt="Favicon"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+          </a>
+
+          {/* Thin Vertical Separator */}
+          <div className="w-[1px] h-4 bg-white/15 mx-2.5 sm:mx-3.5 flex-shrink-0" />
+
+          {/* Navigation Links */}
+          <div className="flex items-center gap-3 sm:gap-6 text-xs sm:text-sm font-medium">
+            {navItems.map((item) => {
+              const isActive = active === item.href;
+
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  onClick={(e) => handleClick(e, item.href)}
+                  className={`relative py-1 transition-colors duration-200 cursor-pointer flex flex-col items-center
+                    ${
+                      isActive
+                        ? "text-white font-semibold"
+                        : "text-[#85898F] hover:text-[#F4F5E7]"
+                    }
+                  `}
+                >
+                  <span>{item.label}</span>
+
+                  {/* Active Indicator Dot (Centered right below the word) */}
+                  {isActive && (
+                    <span className="absolute -bottom-1 w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-[#D6B96A] shadow-[0_0_8px_#D6B96A]" />
+                  )}
+                </a>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Mobile Dropdown Menu */}
-        <div
-          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-black/95 backdrop-blur-xl border-b border-[#403427]/40 ${
-            menuOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0 pointer-events-none"
-          }`}
-        >
-          <div className="px-5 pb-6 pt-2 flex flex-col gap-1.5">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={(e) => handleClick(e, item.href)}
-                className={`py-3 px-4 rounded-xl text-sm font-semibold tracking-wide transition-all duration-200 flex items-center justify-between
-                  ${
-                    active === item.href
-                      ? "text-amber-300 bg-amber-500/10 border border-amber-500/20"
-                      : "text-stone-300 hover:text-white hover:bg-white/5"
-                  }
-                `}
-              >
-                <span>{item.label}</span>
-                {active === item.href && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                )}
-              </a>
-            ))}
-          </div>
+        {/* ─── RIGHT: SOCIAL ICONS (GITHUB, LINKEDIN, EMAIL) ─── */}
+        <div className="flex items-center gap-2 sm:gap-3 text-[#85898F]">
+          <a
+            href="https://github.com/zakyyl"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-1 hover:text-white transition-all hover:scale-110"
+            aria-label="GitHub"
+            title="GitHub"
+          >
+            <GitHubIcon />
+          </a>
+
+          <a
+            href="https://www.linkedin.com/in/zaky-ramadhakara"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-1 hover:text-white transition-all hover:scale-110"
+            aria-label="LinkedIn"
+            title="LinkedIn"
+          >
+            <LinkedInIcon />
+          </a>
+
+          <a
+            href="mailto:zakyramadhakara@gmail.com"
+            className="p-1 hover:text-white transition-all hover:scale-110"
+            aria-label="Email"
+            title="Email"
+          >
+            <EmailIcon />
+          </a>
         </div>
       </nav>
-
-      {/* Overlay backdrop saat menu mobile terbuka */}
-      {menuOpen && (
-        <div
-          className="md:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
-          onClick={() => setMenuOpen(false)}
-        />
-      )}
-    </>
+    </header>
   );
 }
