@@ -88,7 +88,7 @@ export default function About() {
 
                   {/* Centered Tab Label */}
                   <div className="flex items-center gap-1.5 px-3 py-0.5 rounded-md bg-[#161D2A]/80 border border-white/10 text-[11px] font-mono text-[#85898F]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#D6B96A]" />
+                    
                     <span>Zaky Ramadhakara</span>
                   </div>
 
