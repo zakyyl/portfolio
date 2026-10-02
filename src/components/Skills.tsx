@@ -275,14 +275,6 @@ export default function Skills() {
 
       {/* Section Header */}
       <div className="relative max-w-6xl mx-auto px-6 sm:px-10 text-center mb-12 sm:mb-14 z-10">
-        {/* Category Mono Tag */}
-        <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-[#111318] border border-[#1C202A]">
-          <span className="w-2 h-2 rounded-full bg-[#D6B96A] shadow-[0_0_8px_rgba(214,185,106,0.6)]" />
-          <span className="text-xs font-mono font-bold tracking-widest text-[#D6B96A] uppercase">
-            TECH STACK
-          </span>
-        </div>
-
         {/* Main Heading */}
         <h2
           className={`text-4xl sm:text-5xl md:text-6xl font-black text-[#F4F5E7] tracking-tight uppercase leading-[0.95] mb-4 ${anton.className}`}

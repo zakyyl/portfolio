@@ -93,7 +93,7 @@ export default function Projects() {
     <section
       id="projects"
       ref={containerRef}
-      className="relative w-full bg-[#050606] text-[#F4F5E7] pt-20 sm:pt-28 md:pt-32 pb-28 sm:pb-36 md:pb-44 px-4 sm:px-6 md:px-8 overflow-hidden select-none border-t border-b border-[#1C202A]"
+      className="relative w-full bg-[#050606] text-[#F4F5E7] pt-20 sm:pt-28 md:pt-32 pb-28 sm:pb-36 md:pb-44 px-4 sm:px-6 md:px-8 overflow-hidden select-none"
     >
       {/* ── SECTION AMBIENT COOL GLOW ── */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[320px] rounded-full bg-[#222939] opacity-35 blur-[150px] pointer-events-none" />
