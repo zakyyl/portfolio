@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Anton } from "next/font/google";
+import { motion } from "framer-motion";
 
 const anton = Anton({
   subsets: ["latin"],
@@ -274,7 +275,13 @@ export default function Skills() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] rounded-full bg-[radial-gradient(ellipse_at_center,#222939_0%,transparent_70%)] opacity-35 pointer-events-none" />
 
       {/* Section Header */}
-      <div className="relative max-w-6xl mx-auto px-6 sm:px-10 text-center mb-12 sm:mb-14 z-10">
+      <motion.div
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        className="relative max-w-6xl mx-auto px-6 sm:px-10 text-center mb-12 sm:mb-14 z-10"
+      >
         {/* Main Heading */}
         <h2
           className={`text-4xl sm:text-5xl md:text-6xl font-black text-[#F4F5E7] tracking-tight uppercase leading-[0.95] mb-4 ${anton.className}`}
@@ -286,10 +293,16 @@ export default function Skills() {
         <p className="text-[#85898F] text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
           Kumpulan bahasa pemrograman, framework, dan software yang saya gunakan untuk merancang sistem, aplikasi mobile/website, serta infrastruktur.
         </p>
-      </div>
+      </motion.div>
 
       {/* ─── HORIZONTAL MOVING TRACKS (CARD KECIL PER TOOLS) ─── */}
-      <div className="relative w-full overflow-hidden flex flex-col gap-4 sm:gap-5 z-10">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+        className="relative w-full overflow-hidden flex flex-col gap-4 sm:gap-5 z-10"
+      >
         
         {/* Left & Right Fade Edges for Infinite Seamless Glide */}
         <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 sm:w-32 lg:w-48 bg-gradient-to-r from-[#050606] via-[#050606]/80 to-transparent z-20" />
@@ -323,7 +336,7 @@ export default function Skills() {
           </div>
         </div>
 
-      </div>
+      </motion.div>
 
       {/* Subtle Interaction Note */}
       <div className="relative z-10 mt-8 sm:mt-10 flex items-center justify-center gap-2 text-center">
