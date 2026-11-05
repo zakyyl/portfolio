@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Anton } from "next/font/google";
+import { motion } from "framer-motion";
 
 const anton = Anton({
   subsets: ["latin"],
@@ -33,24 +34,48 @@ export default function About() {
           {/* ──────────────────────────────────────────────────────────
               LEFT COLUMN: TEXT CONTENT (BEHIND THE CODE, BIO)
           ────────────────────────────────────────────────────────── */}
-          <div className="lg:col-span-6 flex flex-col justify-center text-left order-2 lg:order-1">
+          <motion.div
+            initial={{ opacity: 0, x: -35 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-6 flex flex-col justify-center text-left order-2 lg:order-1"
+          >
             {/* Category Mono Tag */}
-            <div className="inline-flex items-center gap-2 mb-3">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="inline-flex items-center gap-2 mb-3"
+            >
               <span className="w-2 h-2 rounded-full bg-[#D6B96A] shadow-[0_0_8px_rgba(214,185,106,0.6)]" />
               <span className="text-xs font-mono font-bold tracking-widest text-[#D6B96A] uppercase">
                 WHO I AM
               </span>
-            </div>
+            </motion.div>
 
             {/* Main Heading */}
-            <h2 className={`text-4xl sm:text-5xl md:text-6xl font-black text-[#F4F5E7] tracking-tight uppercase leading-[0.95] mb-5 ${anton.className}`}>
+            <motion.h2
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              className={`text-4xl sm:text-5xl md:text-6xl font-black text-[#F4F5E7] tracking-tight uppercase leading-[0.95] mb-5 ${anton.className}`}
+            >
               BEHIND THE <span className="text-[#A49872]">CODE</span>
-            </h2>
+            </motion.h2>
 
             {/* Bio Narrative */}
-            <div className="space-y-3.5 text-[#F4F5E7]/90 max-w-xl">
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="space-y-3.5 text-[#F4F5E7]/90 max-w-xl"
+            >
               <p className="text-sm sm:text-base leading-relaxed font-normal">
-                Hi! Saya seorang Software Engineer dengan fokus di arsitektur web modern dan cross-platform mobile dev. Untuk ngebangun sistem aku biasanya mengandalkan tech stack seperti Laravel, Next.js, dan Flutter.
+                Hi! Saya seorang Full Stack Developer dengan fokus di arsitektur web modern dan cross-platform mobile dev. Untuk ngebangun sistem aku biasanya mengandalkan tech stack seperti Laravel, Next.js, dan Flutter.
               </p>
               
               <p className="text-xs sm:text-sm text-[#85898F] leading-relaxed">
@@ -60,13 +85,19 @@ export default function About() {
               <p className="text-xs sm:text-sm text-[#85898F] leading-relaxed">
                 Saya terbuka jika ada tawaran full-time, pengen ngajak kolaborasi bareng, atau sekadar mau diskusi santai soal digital products, feel free to reach out ya!
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* ──────────────────────────────────────────────────────────
               RIGHT COLUMN: LANDSCAPE PHOTO (anot.png) IN MACOS WINDOW TAB
           ────────────────────────────────────────────────────────── */}
-          <div className="lg:col-span-6 flex justify-center lg:justify-end order-1 lg:order-2 w-full">
+          <motion.div
+            initial={{ opacity: 0, x: 35, scale: 0.94 }}
+            whileInView={{ opacity: 1, x: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.85, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-6 flex justify-center lg:justify-end order-1 lg:order-2 w-full"
+          >
             <div className="relative w-full max-w-[500px]">
               
               {/* Ambient Glow behind Mac Tab */}
@@ -88,7 +119,6 @@ export default function About() {
 
                   {/* Centered Tab Label */}
                   <div className="flex items-center gap-1.5 px-3 py-0.5 rounded-md bg-[#161D2A]/80 border border-white/10 text-[11px] font-mono text-[#85898F]">
-                    
                     <span>Zaky Ramadhakara</span>
                   </div>
 
@@ -122,7 +152,7 @@ export default function About() {
               </div>
 
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </div>
