@@ -110,7 +110,7 @@ export default function Projects() {
 
       {/* ── EXACT MAX-WIDTH (900px) MATCHING SCREENSHOT WITH SIDE MARGINS ── */}
       <div className="max-w-[900px] mx-auto relative z-10">
-        
+
         {/* ── SECTION HEADER ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -139,7 +139,7 @@ export default function Projects() {
 
         {/* ── 3-COLUMN MASONRY PHOTO GRID WITH STAGGERED PARALLAX SCROLL ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
-          
+
           {/* COLUMN 1 */}
           <motion.div
             style={isDesktop ? { y: y1 } : undefined}

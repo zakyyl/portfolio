@@ -50,7 +50,7 @@ export default function Hero() {
         {/* Role Tag (Warm Gold Accent) */}
         <div className="mb-2 sm:mb-4">
           <span className="text-[10px] sm:text-xs md:text-sm font-mono font-bold tracking-[0.3em] uppercase text-[#D6B96A] drop-shadow-[0_2px_8px_rgba(5,6,6,0.9)]">
-            SOFTWARE ENGINEER
+           FULL STACK DEVELOPER  
           </span>
         </div>
 
