@@ -64,7 +64,7 @@ export const experiences = [
     image: "/images/experiences/celerates.jpg",
   },
   {
-    title: "Software Engineer",
+    title: "Technology Information Staff",
     company: "RS Bhayangkara Jambi",
     year: "2025 - 2026",
     description:
